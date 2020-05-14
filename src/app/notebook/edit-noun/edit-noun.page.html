@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="['tabs', 'notebook', nounId]"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ noun?.word }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onUpdateOffer()" [disabled]="!form?.valid">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="isLoading" class="ion-text-center">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <form [formGroup]="form" *ngIf="!isLoading">
+    <ion-grid>
+      <ion-row>
+        <!-- like this will be center -->
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Word</ion-label>
+            <ion-input 
+              type="text"
+              formControlName="word"
+              (input)="inputValidator.multiWordsSpaceSeparatedValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Translations</ion-label>
+            <ion-input
+              type="text"
+              formControlName="translations" 
+              (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">de/Het</ion-label>
+            <ion-input 
+              type="text"  
+              formControlName="hetDe"
+              (input)="inputValidator.singleWordValidator($event)"
+              ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="!form.get('hetDe').valid && form.get('hetDe').touched">
+        <ion-col size-sm="6" offset-sm="3">
+          <p>Should be 'het' or 'de'</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Plural</ion-label>
+            <ion-input 
+              type="text"
+              formControlName="plural"
+              (input)="inputValidator.singleWordValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Examples</ion-label>
+            <ion-textarea 
+              type="text" 
+              rows="3" 
+              formControlName="examples"
+            ></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

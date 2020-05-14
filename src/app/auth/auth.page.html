@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Welcome to DutchMate</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-segment value="login" (ionChange)="onSwitchAuthMode($event)">
+    <!-- checked is the preselected button only one at the time -->
+    <ion-segment-button value="login">Log in</ion-segment-button>
+    <ion-segment-button value="signup">Sign up</ion-segment-button>
+  </ion-segment>
+  <!-- if I comment item the effect will be not as good as if item is there -->
+  <!-- ion-item wraps label and input is a good a pattern -->
+  <!-- Whatever input in this form will be automatcally available on the module -->
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <!-- <div class="ion-text-center">
+            <h4>{{ !isLogin ? 'Signup' : 'Authenticate'}}</h4>
+          </div> -->
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">E-Mail</ion-label>
+              <ion-input
+                type="email"
+                ngModel
+                name="email"
+                required
+                email
+                #emailCtrl="ngModel"
+              ></ion-input>
+            </ion-item>
+            <ion-item
+              *ngIf="!emailCtrl.valid && emailCtrl.touched"
+              lines="none"
+            >
+              <ion-label>Should be a valid email address.</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input
+                type="password"
+                ngModel
+                name="password"
+                required
+                minlength="8"
+                #passwordCtrl="ngModel"
+              ></ion-input>
+            </ion-item>
+            <ion-item
+              *ngIf="!passwordCtrl.valid && passwordCtrl.touched"
+              lines="none"
+            >
+              <ion-label>Should at least be 8 character long.</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <!-- here I need to give the type button to differentiate form submit -->
+          <ion-button
+            *ngIf="isLogin" 
+            type="button" 
+            color="primary" 
+            fill="clear" 
+            expand="block"
+            [routerLink]="['reset-password']">
+            Forgot password ?
+          </ion-button>
+          <!-- by giving the type submit will be the one submitting the form and binded to the event -->
+          <ion-button
+            type="submit"
+            color="primary"
+            expand="block"
+            [disabled]="!form.valid"
+          >
+          {{ !isLogin ? 'Sign up' : 'Log in'}}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+  <!-- <div class="ion-text-center">
+    <ion-spinner color="primary" *ngIf="isLoading"></ion-spinner>
+  </div> -->
+  <!-- <ion-button color="primary" (click)="onLogin()" *ngIf="!isLoading"> -->
+
+  <!-- I ll use a programmatically created component rather then the spinner component -->
+</ion-content>
+

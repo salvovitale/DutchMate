@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Notebook</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onNewWord()">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+      <ion-searchbar (input)="onSearchBar($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
+        <!-- approxItemHeight helps the virtual scroll algorithm to pre-render stuff correctly -->
+        <!-- we do not need to use virtual scroll everywhere but only on long list -->
+        <ion-virtual-scroll [items]="loadedWords" approxItemHeight="100px">
+          <ion-item
+            *virtualItem="let word"
+            [routerLink]="[getRoute(word.kind),word.id]"
+            detail
+          >
+            <ion-label>
+              <p class="word">{{ word.word }}{{addHetDe(word)}}</p>
+              <p>{{ word.translations.join(', ') }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-virtual-scroll>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

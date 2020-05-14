@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>New Noun</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="primary" (click)="onCancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center padding">
+  <form (ngSubmit)="onAddWord()" #f="ngForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">New Word</ion-label>
+            <ion-input 
+              type="text" 
+              ngModel 
+              name="new-word" 
+              (input)="inputValidator.multiWordsSpaceSeparatedValidator($event)" 
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Translations</ion-label>
+            <ion-input 
+              type="text" 
+              ngModel 
+              name="translations" 
+              (input)="inputValidator.multiWordsComaSeparatedValidator($event)" 
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-list>
+            <ion-radio-group [ngModel]="'de'" name="het-de">
+              <ion-list-header>
+                <ion-label style="font-size:medium;">de/het</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-label>de</ion-label>
+                <ion-radio slot="end" value="de"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>het</ion-label>
+                <ion-radio slot="end" value="het"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Plural Form</ion-label>
+            <ion-input 
+              type="text" 
+              ngModel 
+              name="plural"
+              (input)="inputValidator.singleWordValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-item>
+          <ion-label position="floating">Examples</ion-label>
+          <ion-textarea rows="3" ngModel name="examples"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-button type="submit" color="primary"  expand="block" [disabled]="!f.valid">
+            Add Noun
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
