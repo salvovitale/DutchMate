@@ -52,11 +52,11 @@ export class Verb extends Word {
     public firstPersonPastSingular: string,
     public firstPersonPastPlural: string,
     public pastParticiple: string,
-    public auxVerb: 'zijn' | 'hebben',
+    public auxVerb: string,
     public isRegular: boolean,
     public firstAdded: Date,
     public lastUpdated: Date,
-    public knowledgeStrength: number    
+    public knowledgeStrength: number
   ) {
     super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, knowledgeStrength);
   }

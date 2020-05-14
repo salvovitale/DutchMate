@@ -8,16 +8,16 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { NounInput } from '../wordInput.module';
 
 interface NounData {
-  userId: string,
-  word: string,
-  plural: string,
-  translations: string[],
-  hetDe: string,
-  kind: string,
-  examples: string,
-  firstAdded: string,
-  lastUpdated: string,
-  knowledgeStrength: number
+  userId: string;
+  word: string;
+  plural: string;
+  translations: string[];
+  hetDe: string;
+  kind: string;
+  examples: string;
+  firstAdded: string;
+  lastUpdated: string;
+  knowledgeStrength: number;
 }
 
 @Injectable({

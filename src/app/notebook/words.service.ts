@@ -82,14 +82,14 @@ export class WordsService {
       switchMap(
         nouns => {
           fetchedNouns = nouns;
-          return nouns
+          return this.verbsService.fetchVerbs();
         }
       ),
       tap(
-        nouns =>{
-          this._words.next(fetchedNouns.sort((a,b) => (a.word > b.word) ? 1 : ((b.word > a.word) ? -1 : 0)));
+        verbs =>{
+          this._words.next(fetchedNouns.concat(verbs).sort((a,b) => (a.word > b.word) ? 1 : ((b.word > a.word) ? -1 : 0)));
         }
       )
     )
-  }  
+  }
 }
