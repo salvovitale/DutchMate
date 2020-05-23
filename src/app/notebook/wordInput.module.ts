@@ -6,7 +6,7 @@ export class WordInput {
     public translations: string,
     public kind: KindWord,
     public examples: string,
-  ) {}   
+  ) {}
 }
 
 export class NounInput extends WordInput {
@@ -32,8 +32,8 @@ export class VerbInput extends WordInput {
     public firstPersonPastSingular: string,
     public firstPersonPastPlural: string,
     public pastParticiple: string,
-    public auxVerb: 'zijn' | 'hebben',
-    public isRegular: boolean,  
+    public auxVerb: string,
+    public isRegular: boolean,
   ) {
     super(word, translations, kind, examples);
   }

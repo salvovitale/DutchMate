@@ -99,7 +99,7 @@ export class NounsService {
           return of(nouns);
         }
       )
-    )  
+    )
   }
 
   deleteNoun(id: string){
@@ -110,7 +110,7 @@ export class NounsService {
 
   getNoun(id: string) {
     return this.http.get<NounData>(
-      `${environment.databaseUrl}/nouns/${id}.json`,  
+      `${environment.databaseUrl}/nouns/${id}.json`,
     ).pipe(
       map(
         nounData =>{
@@ -128,41 +128,34 @@ export class NounsService {
             +nounData.knowledgeStrength
           )
         }
-      ) 
+      )
     )
   }
 
-  updateNoun(id: string,
-             word: string,
-             translations: string,
-             hetDe: string,
-             plural: string, 
-             examples: string,
-             )
-  {
-    let separatedTranslation = translations.split(',').map(s => s.trim()).filter(el => el !== ''); 
+  updateNoun(id: string, nounInput: NounInput){
+    let separatedTranslation = nounInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
     return this.getNoun(id).pipe(
       switchMap(
         oldNoun => {
           let updatedNoun = new Noun(
             id,
             oldNoun.userId,
-            word,
+            nounInput.word,
             separatedTranslation,
             KindWord.Noun,
-            examples,
-            hetDe,
-            plural,
+            nounInput.examples,
+            nounInput.hetDe,
+            nounInput.plural,
             oldNoun.firstAdded,
             new Date(),
             oldNoun.knowledgeStrength
-          )
+          );
           return this.http.put(
             `${environment.databaseUrl}/nouns/${id}.json`,
-                {...updatedNoun, id: null}  
-          )  
+                {...updatedNoun, id: null}
+          )
         }
       )
-    )          
+    )
   }
 }

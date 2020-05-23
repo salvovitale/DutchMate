@@ -3,7 +3,7 @@ import { VerbInput } from '../wordInput.module';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../auth/auth.service';
 import { Verb, KindWord } from '../word.module';
-import { take, switchMap } from 'rxjs/operators';
+import { take, switchMap, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { of } from 'rxjs';
 
@@ -49,7 +49,7 @@ export class VerbsService {
             separatedTranslation,
             KindWord.Verb,
             verbDataInput.examples,
-            verbDataInput.firstPersonPastPlural,
+            verbDataInput.firstPersonPresent,
             verbDataInput.firstPersonPastSingular,
             verbDataInput.firstPersonPastPlural,
             verbDataInput.pastParticiple,
@@ -113,4 +113,70 @@ export class VerbsService {
       )
     )
   }
+
+  deleteVerb(id: string){
+    return this.http.delete(
+      `${environment.databaseUrl}/verbs/${id}.json`
+    )
+  }
+
+  getVerb(id: string) {
+    return this.http.get<VerbData>(
+      `${environment.databaseUrl}/verbs/${id}.json`,
+    ).pipe(
+      map(
+        verbData =>{
+          return new Verb(
+            id,
+            verbData.userId,
+            verbData.word,
+            verbData.translations,
+            +verbData.kind,
+            verbData.examples,
+            verbData.firstPersonPresent,
+            verbData.firstPersonPastSingular,
+            verbData.firstPersonPastPlural,
+            verbData.pastParticiple,
+            verbData.auxVerb,
+            verbData.isRegular,
+            new Date(verbData.firstAdded),
+            new Date(verbData.lastUpdated),
+            +verbData.knowledgeStrength
+          )
+        }
+      )
+    )
+  }
+
+  updateVerb(id: string, verbInput: VerbInput){
+    let separatedTranslation = verbInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
+    return this.getVerb(id).pipe(
+      switchMap(
+        oldVerb => {
+          let updatedVerb = new Verb(
+            id,
+            oldVerb.userId,
+            verbInput.word,
+            separatedTranslation,
+            KindWord.Verb,
+            verbInput.examples,
+            verbInput.firstPersonPresent,
+            verbInput.firstPersonPastSingular,
+            verbInput.firstPersonPastPlural,
+            verbInput.pastParticiple,
+            verbInput.auxVerb,
+            verbInput.isRegular,
+            oldVerb.firstAdded,
+            new Date(),
+            oldVerb.knowledgeStrength
+          );
+          return this.http.put(
+            `${environment.databaseUrl}/verbs/${id}.json`,
+            {...updatedVerb, id: null}
+          )
+        }
+      )
+    )
+  }
+
 }

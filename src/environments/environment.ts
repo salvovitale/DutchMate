@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  databaseUrl: 'add url',
+  signUpUrl: 'add url',
+  signInUrl: 'add url',
+  firebaseAPIKey: 'add key',
+  authDataStoreKey: 'add store key'
 };
 
 /*

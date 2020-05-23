@@ -16,8 +16,12 @@ const routes: Routes = [
     loadChildren: () => import('./edit-noun/edit-noun.module').then( m => m.EditNounPageModule)
   },
   {
-    path: 'verb-detail',
+    path: 'verbs/:verbId',
     loadChildren: () => import('./verb-detail/verb-detail.module').then( m => m.VerbDetailPageModule)
+  },
+  {
+    path: 'verbs/edit/:verbId',
+    loadChildren: () => import('./edit-verb/edit-verb.module').then( m => m.EditVerbPageModule)
   }
 ];
 

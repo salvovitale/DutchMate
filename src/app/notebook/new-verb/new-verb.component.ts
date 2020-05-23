@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { VerbInput } from '../wordInput.module';
 import { KindWord } from '../word.module';
+import { InputValidator } from '../../shared/util/inputValidator';
 
 @Component({
   selector: 'app-new-verb',
@@ -12,9 +13,10 @@ import { KindWord } from '../word.module';
 export class NewVerbComponent implements OnInit {
 
   @ViewChild('f', {static : true}) form: NgForm;
-  
+
   constructor(
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public inputValidator: InputValidator
   ) { }
 
   ngOnInit() {}
@@ -39,7 +41,7 @@ export class NewVerbComponent implements OnInit {
   }
 
   onCancel(){
-    this.modalCtrl.dismiss(null, 'cancel'); 
+    this.modalCtrl.dismiss(null, 'cancel');
   }
 
 }

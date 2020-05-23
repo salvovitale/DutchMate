@@ -1,9 +1,105 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>verb-detail</ion-title>
+    <ion-buttons slot="start">
+      <!-- if we refresh the stack is lost and the page does not know where to go back. We can fix that with the defaultHref -->
+      <ion-back-button defaultHref="/tabs/notebook"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ verb?.word }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onEditNoun(verbId)">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="ion-no-padding">
+  <div class="ion-text-center"  *ngIf="isLoading">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ion-grid class="ion-no-padding" *ngIf="!isLoading && verb">
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-no-padding">
+        <h5>Translations</h5>
+        <p>{{ verb.translations.join(', ') }}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-no-padding">
+        <p>Infinitief: <b>{{ verb.word }}</b></p>
+        <p>onvoltooid verleden tijd: <b>{{ verb.firstPersonPastSingular }}</b></p>
+        <p>voltooid deelwoord: <b>{{ verb.pastParticiple }}</b></p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-no-padding">
+        <h5>Aantonende wijs</h5>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
+        <h6>onvoltooid tegenwoordige tijd (ott)</h6>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
+        <app-personal-pronouns></app-personal-pronouns>
+      </ion-col>
+      <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
+        <app-present-conj [verb]="verb"></app-present-conj>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
+        <h6>voltooid tegenwoordige tijd (vtt)</h6>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
+        <app-personal-pronouns></app-personal-pronouns>
+      </ion-col>
+      <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
+        <app-present-perfect-conj [verb]="verb"></app-present-perfect-conj>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
+        <h6> onvoltooid verleden tijd (ovt)</h6>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
+        <app-personal-pronouns></app-personal-pronouns>
+      </ion-col>
+      <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
+        <app-simple-past-conj [verb]="verb"></app-simple-past-conj>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
+        <h6> voltooid verleden tijd (vvt)</h6>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
+        <app-personal-pronouns></app-personal-pronouns>
+      </ion-col>
+      <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
+        <app-past-perfect-conj [verb]="verb"></app-past-perfect-conj>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-padding">
+        <h5>Examples</h5>
+        <ion-textarea readonly>{{ verb.examples }}</ion-textarea>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
+        <ion-button color="danger" class="ion-margin" (click)="onDelete(verb.id)">
+          Delete
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

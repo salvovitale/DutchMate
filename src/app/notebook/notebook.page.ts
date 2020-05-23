@@ -134,7 +134,7 @@ export class NotebookPage implements OnInit, OnDestroy {
         .create({
           message: 'Adding a verb...'
         })
-        .then(loadingEl => 
+        .then(loadingEl =>
           {
             loadingEl.present();
             const data = resultData.data
@@ -163,7 +163,7 @@ export class NotebookPage implements OnInit, OnDestroy {
         .create({
           message: 'Adding a noun...'
         })
-        .then(loadingEl => 
+        .then(loadingEl =>
           {
             loadingEl.present();
             const data = resultData.data

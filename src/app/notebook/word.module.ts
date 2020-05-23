@@ -19,7 +19,7 @@ export class Word {
     public firstAdded: Date,
     public lastUpdated: Date,
     public knowledgeStrength: number
-  ) {}   
+  ) {}
 }
 
 export class Noun extends Word {

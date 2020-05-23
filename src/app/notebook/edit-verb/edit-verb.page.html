@@ -1,16 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>New Verb</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="['tabs', 'notebook', 'verbs', verbId]"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ verb?.word }}</ion-title>
     <ion-buttons slot="primary">
-      <ion-button color="primary" (click)="onCancel()">
-        <ion-icon name="close"></ion-icon>
+      <ion-button (click)="onUpdateVerb()" [disabled]="!form?.valid">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-text-center padding">
-  <form (ngSubmit)="onAddVerb()" #f="ngForm">
+  <div *ngIf="isLoading" class="ion-text-center">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <form [formGroup]="form" *ngIf="!isLoading">
     <ion-grid>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
@@ -18,10 +24,9 @@
             <ion-label position="floating">Infinite Form</ion-label>
             <ion-input
               type="text"
-              ngModel
-              name="new-verb"
+              formControlName="word"
               (input)="inputValidator.multiWordsSpaceSeparatedValidator($event)"
-              required></ion-input>
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -31,10 +36,9 @@
             <ion-label position="floating">Translations</ion-label>
             <ion-input
               type="text"
-              ngModel
-              name="translations"
+              formControlName="translations"
               (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
-              required></ion-input>
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -44,10 +48,9 @@
             <ion-label position="floating">First Person Present Singular</ion-label>
             <ion-input
               type="text"
-              ngModel
-              name="first-person-present"
+              formControlName="firstPersonPresent"
               (input)="inputValidator.multiWordsSpaceSeparatedValidator($event)"
-              required></ion-input>
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -57,10 +60,9 @@
             <ion-label position="floating">First Person Past Singular</ion-label>
             <ion-input
               type="text"
-              ngModel
-              name="first-person-past-singular"
+              formControlName="firstPersonPastSingular"
               (input)="inputValidator.multiWordsSpaceSeparatedValidator($event)"
-              required></ion-input>
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -70,10 +72,9 @@
             <ion-label position="floating">First Person Past Plural</ion-label>
             <ion-input
               type="text"
-              ngModel
-              name="first-person-past-plural"
+              formControlName="firstPersonPastPlural"
               (input)="inputValidator.multiWordsSpaceSeparatedValidator($event)"
-              required></ion-input>
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -83,38 +84,37 @@
             <ion-label position="floating">Past Participle</ion-label>
             <ion-input
               type="text"
-              ngModel
-              name="past-participle"
+              formControlName="pastParticiple"
               (input)="inputValidator.singleWordValidator($event)"
-              required></ion-input>
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
+          <ion-radio-group [value]="auxVerb" (ionChange)="onAuxVerbChange($event)">
           <ion-list>
-            <ion-radio-group [ngModel]="'hebben'" name="aux-verb">
               <ion-list-header>
                 <ion-label>Auxiliary Verb</ion-label>
               </ion-list-header>
               <ion-item>
-                <ion-label>hebben</ion-label>
-                <ion-radio slot="end" value="hebben"></ion-radio>
+                <ion-label>habben</ion-label>
+                <ion-radio slot="end" value="habben"></ion-radio>
               </ion-item>
               <ion-item>
                 <ion-label>zijn</ion-label>
                 <ion-radio slot="end" value="zijn"></ion-radio>
               </ion-item>
-            </ion-radio-group>
           </ion-list>
+        </ion-radio-group>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
+          <ion-radio-group [value]="isRegular" (ionChange)="onIsRegularChange($event)">
           <ion-list>
-            <ion-radio-group [ngModel]="'yes'" name="is-regular">
               <ion-list-header>
-                <ion-label>Is Regular?</ion-label>
+                <ion-label>Auxiliary Verb</ion-label>
               </ion-list-header>
               <ion-item>
                 <ion-label>yes</ion-label>
@@ -124,23 +124,18 @@
                 <ion-label>no</ion-label>
                 <ion-radio slot="end" value="no"></ion-radio>
               </ion-item>
-            </ion-radio-group>
           </ion-list>
+        </ion-radio-group>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-label position="floating">Examples</ion-label>
-            <ion-textarea rows="3" ngModel name="examples"></ion-textarea>
+            <ion-textarea
+              rows="3"
+              formControlName="examples"></ion-textarea>
           </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-button type="submit" color="primary"  expand="block" [disabled]="!f.valid">
-            Add Verb
-          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

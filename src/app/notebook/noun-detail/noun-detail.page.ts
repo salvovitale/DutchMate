@@ -35,7 +35,7 @@ export class NounDetailPage implements OnInit {
           if(!paramMap.has('nounId')){
             this.navCtrl.navigateBack('/tabs/notebook');
           }
-          this.nounId = paramMap.get('nounId'); 
+          this.nounId = paramMap.get('nounId');
           return this.nounsService.getNoun(this.nounId);
         }
       )
@@ -74,7 +74,6 @@ export class NounDetailPage implements OnInit {
         this.navCtrl.navigateBack('/tabs/notebook');
       });
     })
-    
   }
 
   onEditNoun(id: string){

@@ -13,7 +13,7 @@ import { KindWord } from '../word.module';
 export class NewNounComponent implements OnInit {
 
   @ViewChild('f', {static : true}) form: NgForm;
-  
+
   constructor(
     private modalCtrl: ModalController,
     public inputValidator: InputValidator
@@ -37,6 +37,6 @@ export class NewNounComponent implements OnInit {
   }
 
   onCancel(){
-    this.modalCtrl.dismiss(null, 'cancel'); 
+    this.modalCtrl.dismiss(null, 'cancel');
   }
 }

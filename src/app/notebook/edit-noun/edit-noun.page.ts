@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Noun } from '../word.module';
+import { Noun, KindWord } from '../word.module';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, LoadingController, AlertController } from '@ionic/angular';
 import { NounsService } from '../services/nouns.service';
 import { InputValidator } from '../../shared/util/inputValidator';
+import { NounInput } from '../wordInput.module';
 
 @Component({
   selector: 'app-edit-noun',
@@ -13,15 +14,16 @@ import { InputValidator } from '../../shared/util/inputValidator';
   styleUrls: ['./edit-noun.page.scss'],
 })
 export class EditNounPage implements OnInit , OnDestroy {
-  
+
   noun: Noun
   form: FormGroup;
   nounId: string;
+  hetDe: string;
   isLoading = false;
   private myNounSub: Subscription;
 
-  constructor(    
-    private route: ActivatedRoute, 
+  constructor(
+    private route: ActivatedRoute,
     private navCtrl: NavController,
     private nounsService: NounsService,
     private router: Router,
@@ -41,7 +43,8 @@ export class EditNounPage implements OnInit , OnDestroy {
       this.myNounSub = this.nounsService.getNoun(this.nounId)
       .subscribe(noun => {
         this.noun = noun;
-        // we need to initialize it here. Because this code run 
+        this.hetDe = noun.hetDe;
+        // we need to initialize it here. Because this code run
         // asyncronoysly so if we init outside it can be that the placeId has not be selected yet.
         this.form = new FormGroup({
           word: new FormControl(this.noun.word, {
@@ -51,10 +54,6 @@ export class EditNounPage implements OnInit , OnDestroy {
           translations: new FormControl(this.noun.translations.join(', '), {
             updateOn: 'blur',
             validators: [Validators.required]
-          }),
-          hetDe: new FormControl(this.noun.hetDe, {
-            updateOn: 'blur',
-            validators: [this.hetDeValueValidator()]
           }),
           plural: new FormControl(this.noun.plural, {
             updateOn: 'blur',
@@ -87,7 +86,7 @@ export class EditNounPage implements OnInit , OnDestroy {
     }
   }
 
-  onUpdateOffer(){
+  onUpdateNoun(){
     if(!this.form.valid){
       return;
     }
@@ -95,27 +94,29 @@ export class EditNounPage implements OnInit , OnDestroy {
       message: 'Updating noun...'
     }).then(loadingEl => {
       loadingEl.present();
-      this.nounsService.updateNoun(
-        this.nounId,
+      const nounEdited = new NounInput(
         this.form.value.word,
         this.form.value.translations,
-        this.form.value.hetDe,
-        this.form.value.plural,
+        KindWord.Noun,
         this.form.value.examples,
-      ).subscribe(()=>{
-        loadingEl.dismiss();
-        this.form.reset();
-        this.router.navigate(['/','tabs','notebook','nouns', this.nounId]);
-      });
+        this.hetDe,
+        this.form.value.plural
+      );
+      this.nounsService.updateNoun(this.nounId, nounEdited).subscribe(
+        () =>
+        {
+          loadingEl.dismiss();
+          this.form.reset();
+          this.router.navigate(['/','tabs','notebook','nouns', this.nounId]);
+        }
+      );
     })
   }
 
-  private hetDeValueValidator(): ValidatorFn {
-    return (control : AbstractControl) : {[key: string] : any } | null => {
-      if (control.value === 'het' || control.value === 'de' ) {
-        return null;
-      }
-      return { 'hetDeValue': {value: control.value } };
+  onHetDeChange(event){
+    if(!event.target.value){
+      return;
     }
+    this.hetDe = event.target.value;
   }
 }
