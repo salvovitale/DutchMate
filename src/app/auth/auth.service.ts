@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, from } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, switchMap } from 'rxjs/operators';
 import { User } from './user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -15,12 +15,21 @@ export interface AuthResponseData {
   registered? : boolean //optional only  returned with login
 }
 
+export interface RefreshTokenResponseData {
+  expires_in: string,
+  token_type: string,
+  refresh_token: string;
+  id_token: string;
+  user_id: string;
+  project_id: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private _user = new BehaviorSubject<User>(null);
-  private activeLogoutTimer : any;
+  private activeRefreshTokenTimer : any;
 
   get userIsAuthenticated(){
     return this._user.asObservable().pipe(map(user =>
@@ -56,9 +65,10 @@ export class AuthService {
   }
 
   constructor(private http: HttpClient) { }
+
   ngOnDestroy(): void {
-    if(this.activeLogoutTimer){
-      clearTimeout(this.activeLogoutTimer);
+    if(this.activeRefreshTokenTimer){
+      clearTimeout(this.activeRefreshTokenTimer);
     }
   }
 
@@ -70,11 +80,21 @@ export class AuthService {
             return this.retrieveUserFromLocalStorage(storeData)
           }
         ),
-        tap(
+        map(
           user=>{
-            if(user){
+            if(user && user.token && user.timeToRefreshToken > 0){
               this._user.next(user);
-              this.autoLogOut(user.tokenDuration);
+              // console.log(user);
+              this.setAutoTokenRefresh(user.timeToRefreshToken);
+              return user;
+            } else {
+              if(this.activeRefreshTokenTimer){
+                clearTimeout(this.activeRefreshTokenTimer);
+              }
+              console.log('refreshing token is not possible anymore');
+              this._user.next(null);
+              Plugins.Storage.remove({key: environment.authDataStoreKey});
+              return null;
             }
           }
         ),
@@ -110,8 +130,8 @@ export class AuthService {
   }
 
   logout(){
-    if(this.activeLogoutTimer){
-      clearTimeout(this.activeLogoutTimer);
+    if(this.activeRefreshTokenTimer){
+      clearTimeout(this.activeRefreshTokenTimer);
     }
     // I need to clear my data in the local storage
     this._user.next(null);
@@ -128,6 +148,49 @@ export class AuthService {
     );
   }
 
+  autoRefreshToken(){
+    let retrievedUser: User;
+    return from(Plugins.Storage.get({key: environment.authDataStoreKey}))
+       .pipe(
+         map(
+           storeData => {
+             return this.retrieveUserFromLocalStorage(storeData)
+           }
+         ),
+         switchMap(
+           user=>{
+             if(user){
+              retrievedUser = user;
+              return this.http.post<RefreshTokenResponseData>(
+                `https://securetoken.googleapis.com/v1/token?key=${environment.firebaseAPIKey}`,
+                {
+                  grant_type: "refresh_token",
+                  refresh_token: user.refreshToken
+                }
+              );
+             }
+           }
+         ),
+         tap(
+           // we return true if we have a user or otherwise the null will be converted to false
+           refreshRespData=>{
+            const newExpirationTime = new Date(new Date().getTime() + (+refreshRespData.expires_in*1000));
+            const refreshedUser = new User(
+              retrievedUser.id,
+              retrievedUser.email,
+              refreshRespData.id_token,
+              refreshRespData.refresh_token,
+              newExpirationTime
+            );
+            // console.log(refreshedUser);
+            this._user.next(refreshedUser);
+            this.setAutoTokenRefresh(refreshedUser.timeToRefreshToken);
+            this.storeAuthData(refreshedUser, newExpirationTime.toISOString())
+           }
+         )
+       );
+   }
+
   private setUserData(userData: AuthResponseData){
     const expirationTime = new Date(new Date().getTime() + (+userData.expiresIn*1000));
     const user = new User(
@@ -138,7 +201,7 @@ export class AuthService {
       expirationTime
     );
     this._user.next(user);
-    this.autoLogOut(user.tokenDuration);
+    this.setAutoTokenRefresh(user.timeToRefreshToken);
     this.storeAuthData(user, expirationTime.toISOString())
   }
 
@@ -174,12 +237,13 @@ export class AuthService {
     return user;
   }
 
-  private autoLogOut(duration: number){
-    if(this.activeLogoutTimer){
-      clearTimeout(this.activeLogoutTimer);
+  private setAutoTokenRefresh(duration: number){
+    if(this.activeRefreshTokenTimer){
+      clearTimeout(this.activeRefreshTokenTimer);
     }
-    this.activeLogoutTimer = setTimeout(()=>{
-      this.logout();
+    console.log('Set token refresh in: ' + duration);
+    this.activeRefreshTokenTimer = setTimeout(()=>{
+      this.autoRefreshToken().subscribe();
     }, duration)
   }
 }

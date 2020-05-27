@@ -17,7 +17,7 @@ export class User {
   get refreshToken(){
     return this._refreshToken;
   }
-  
+
   get tokenDuration(){
     if(!this._token){
       return 0;
@@ -25,4 +25,10 @@ export class User {
     return this.tokenExpirationDate.getTime() - new Date().getTime();
   }
 
+  get timeToRefreshToken(){
+    if(this.tokenDuration - 60000 > 0){
+      return this.tokenDuration - 60000;
+    }
+    return -1;
+  }
 }
