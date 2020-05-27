@@ -140,7 +140,7 @@ export class AuthService {
 
   sendPasswordResetEmail(email: string){
     return this.http.post<{email: string}>(
-      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${environment.firebaseAPIKey}`,
+      `${environment.sendResetPasswordUrl}?key=${environment.firebaseAPIKey}`,
       {
         requestType: "PASSWORD_RESET",
         email: email
@@ -162,7 +162,7 @@ export class AuthService {
              if(user){
               retrievedUser = user;
               return this.http.post<RefreshTokenResponseData>(
-                `https://securetoken.googleapis.com/v1/token?key=${environment.firebaseAPIKey}`,
+                `${environment.refreshTokenUrl}?key=${environment.firebaseAPIKey}`,
                 {
                   grant_type: "refresh_token",
                   refresh_token: user.refreshToken
