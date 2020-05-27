@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ (adjOrAdv === 'adj') ? 'New Adjective' : 'New Adverb' }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="primary" (click)="onCancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center padding">
+  <form (ngSubmit)="onAddWord()" #f="ngForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-list>
+            <ion-radio-group [value]="adjOrAdv" (ionChange)="onAdjAdvChange($event)">
+              <ion-list-header>
+                <ion-label style="font-size:medium;">Adjective or Adverb ?</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-label>Adjective</ion-label>
+                <ion-radio slot="end" value="adj"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>Adverb</ion-label>
+                <ion-radio slot="end" value="adv"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">New Word</ion-label>
+            <ion-input
+              type="text"
+              ngModel
+              name="new-word"
+              (input)="inputValidator.multiWordsSpaceSeparatedValidator($event)"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Translations</ion-label>
+            <ion-input
+              type="text"
+              ngModel
+              name="translations"
+              (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <div *ngIf="adjOrAdv === 'adj'">
+        <ion-row>
+          <ion-col size-sm="6" offset-sm="3">
+            <ion-item>
+              <ion-label position="floating">-e Form</ion-label>
+              <ion-input
+                type="text"
+                ngModel
+                name="e-form"
+                (input)="inputValidator.singleWordValidator($event)"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-sm="6" offset-sm="3">
+            <ion-list>
+              <ion-radio-group [value]="isAdjAlsoAdv" (ionChange)="onIsAdjAlsoAdvChange($event)">
+                <ion-list-header>
+                  <ion-label style="font-size:medium;">Is this Adjective also used as an Adverb ?</ion-label>
+                </ion-list-header>
+                <ion-item>
+                  <ion-label>Yes</ion-label>
+                  <ion-radio slot="end" value="yes"></ion-radio>
+                </ion-item>
+                <ion-item>
+                  <ion-label>No</ion-label>
+                  <ion-radio slot="end" value="no"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="isAdjAlsoAdv==='yes'">
+          <ion-col size-sm="6" offset-sm="3">
+            <ion-item>
+              <ion-label position="floating">Adverb Translations</ion-label>
+              <ion-input
+                type="text"
+                ngModel
+                name="adverb-translations"
+                (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
+                required
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </div>
+
+
+      <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-item>
+          <ion-label position="floating">Examples</ion-label>
+          <ion-textarea rows="3" ngModel name="examples"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-button type="submit" color="primary"  expand="block" [disabled]="!f.valid">
+            {{ (adjOrAdv === 'adj') ? 'Add Adjective' : 'Add Adverb' }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+

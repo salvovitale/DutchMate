@@ -5,8 +5,10 @@ import { BehaviorSubject } from 'rxjs';
 import { take, tap, delay, map, switchMap } from 'rxjs/operators';
 import { NounsService } from './services/nouns.service';
 import { Router } from '@angular/router';
-import { NounInput, VerbInput } from './wordInput.module';
+import { NounInput, VerbInput, AdjectiveInput, AdverbInput } from './wordInput.module';
 import { VerbsService } from './services/verbs.service';
+import { AdjectivesService } from './services/adjectives.service';
+import { AdverbsService } from './services/adverbs.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +20,8 @@ export class WordsService {
     private http: HttpClient,
     private nounsService: NounsService,
     private verbsService: VerbsService,
+    private adjectivesService: AdjectivesService,
+    private adverbsService: AdverbsService,
     private router: Router) { }
 
   get words(){
@@ -33,7 +37,7 @@ export class WordsService {
             tap(
               words => {
                 this._words.next(words.concat(newNoun));
-                this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
+                // this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
               }
             )
           )
@@ -92,18 +96,68 @@ export class WordsService {
     )
   }
 
+  addAdjective(adjectiveDataInput: AdjectiveInput){
+    return this.adjectivesService.addAdjective(adjectiveDataInput).pipe(
+      switchMap(
+        newAdjective => {
+          return this.words.pipe(
+            take(1),
+            tap(
+              words => {
+                this._words.next(words.concat(newAdjective));
+                // this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
+              }
+            )
+          )
+        }
+      )
+    )
+  }
+
+  addAdverb(adverbDataInput: AdverbInput){
+    return this.adverbsService.addAdverb(adverbDataInput).pipe(
+      switchMap(
+        newAdverb => {
+          return this.words.pipe(
+            take(1),
+            tap(
+              words => {
+                this._words.next(words.concat(newAdverb));
+                // this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
+              }
+            )
+          )
+        }
+      )
+    )
+  }
+
   fetchWords(){
     let fetchedNouns = []
+    let fetchedAdjectives = [];
+    let fetchedAdverbs = [];
     return this.nounsService.fetchNouns().pipe(
       switchMap(
         nouns => {
           fetchedNouns = nouns;
+          return this.adjectivesService.fetchAdjectives();
+        }
+      ),
+      switchMap(
+        adjectives => {
+          fetchedAdjectives = adjectives;
+          return this.adverbsService.fetchAdverbs();
+        }
+      ),
+      switchMap(
+        adverbs => {
+          fetchedAdverbs = adverbs;
           return this.verbsService.fetchVerbs();
         }
       ),
       tap(
         verbs =>{
-          this._words.next(fetchedNouns.concat(verbs).sort((a,b) => (a.word > b.word) ? 1 : ((b.word > a.word) ? -1 : 0)));
+          this._words.next(fetchedNouns.concat(fetchedAdjectives).concat(fetchedAdverbs).concat(verbs).sort((a,b) => (a.word > b.word) ? 1 : ((b.word > a.word) ? -1 : 0)));
         }
       )
     )

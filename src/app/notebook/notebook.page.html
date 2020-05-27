@@ -11,7 +11,32 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-      <ion-searchbar (input)="onSearchBar($event)"></ion-searchbar>
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size-xs="8" size-sm="9" class="ion-no-padding">
+          <ion-searchbar (ionInput)="onSearchBar($event)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="4" size-sm="3" class="ion-no-padding">
+          <ion-item class="ion-no-padding">
+            <ion-label class="ion-no-margin time-icon">
+              <ion-icon  name="time-outline" slot="start" size="large"></ion-icon>
+            </ion-label>
+            <ion-select class="time-select" [value]="timeSpan" (ionChange)="onTimeSpanChange($event)">
+              <ion-select-option value="all">all</ion-select-option>
+              <ion-select-option value="15m">15 m</ion-select-option>
+              <ion-select-option value="1h">1 h</ion-select-option>
+              <ion-select-option value="6h">6 h</ion-select-option>
+              <ion-select-option value="12h">12 h</ion-select-option>
+              <ion-select-option value="1d">1 d</ion-select-option>
+              <ion-select-option value="2d">2 d</ion-select-option>
+              <ion-select-option value="1w">1 w</ion-select-option>
+              <ion-select-option value="2w">2 w</ion-select-option>
+              <ion-select-option value="1M">1 M</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
 </ion-header>
 

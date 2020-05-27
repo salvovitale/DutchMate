@@ -17,6 +17,7 @@ export class VerbDetailPage implements OnInit {
   verb: Verb;
   verbId: string;
   isLoading = false;
+  showMore = false;
 
   constructor(
     private router: Router,
@@ -62,6 +63,10 @@ export class VerbDetailPage implements OnInit {
       //   });
       // }
     )
+  }
+
+  onShowMore(){
+    this.showMore = !this.showMore;
   }
 
   onDelete(verbId: string){

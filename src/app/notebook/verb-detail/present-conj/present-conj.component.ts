@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Verb } from '../../word.module';
+import { Component } from '@angular/core';
 import { ConjComponent } from '../conj/conj.component';
 
 @Component({
@@ -20,7 +19,7 @@ export class PresentConjComponent extends ConjComponent {
     if(this.verb.word.substring(this.verb.word.length - 3) === 'aan'){
       suffix = 'at'
     }
-    if(this.verb.word.substring(this.verb.word.length - 1) === 't'){
+    if(this.verb.firstPersonPresent.substring(this.verb.firstPersonPresent.length - 1) === 't'){
       suffix = ''
     }
     if(verbWords.length < 2){

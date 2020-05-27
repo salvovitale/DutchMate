@@ -6,6 +6,7 @@ import { NewVerbComponent } from './new-verb/new-verb.component';
 import { WordsService } from './words.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { NewAdjAdvComponent } from './new-adj-adv/new-adj-adv.component';
 
 @Component({
   selector: 'app-notebook',
@@ -15,14 +16,17 @@ import { Router } from '@angular/router';
 export class NotebookPage implements OnInit, OnDestroy {
 
   loadedWords : Word[];
-  private _wordsSub: Subscription; 
-    
+  private _wordsSub: Subscription;
+  timeSpan= 'all';
+  timeSpanForFilter = new Date('01-01-1999');
+  searchValue='';
+
   constructor(
     private actionSheetCtrl: ActionSheetController,
     private modalCtrl: ModalController,
     private wordsService: WordsService,
     private loadingCtrl: LoadingController,
-    private router: Router, 
+    private router: Router,
   ) {}
 
   ngOnDestroy(): void {
@@ -31,8 +35,7 @@ export class NotebookPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-    console.log("Notebook Init");
+  ngOnInit(): void {;
     this._wordsSub = this.wordsService.words.subscribe(
       words => {
         this.loadedWords = words;
@@ -41,24 +44,7 @@ export class NotebookPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(){
-    console.log("Notebook View Will Enter");
     this.wordsService.fetchWords().subscribe();
-  }
-
-  onSearchBar(event: any){
-    this.wordsService.words.subscribe(
-      words => {
-        if(!event.target.value){
-          this.loadedWords = words;
-        }
-        const searchValue = event.target.value;
-        this.loadedWords = words.filter(
-          word => (
-            word.word.includes(searchValue) || word.translations.some(translation => translation.includes(searchValue))
-          )
-        );
-      }
-    )
   }
 
   getRoute(kind: KindWord){
@@ -79,7 +65,7 @@ export class NotebookPage implements OnInit, OnDestroy {
     if (word.kind === KindWord.Noun){
       let noun = word as Noun;
       return ' (' + noun.hetDe +  ')';
-    } 
+    }
     return '';
   }
 
@@ -90,7 +76,7 @@ export class NotebookPage implements OnInit, OnDestroy {
       buttons: [
         {
           text: 'Noun',
-          handler: () => { 
+          handler: () => {
             this.openNewNounModal();
           }
         },
@@ -101,8 +87,9 @@ export class NotebookPage implements OnInit, OnDestroy {
           }
         },
         {
-          text: 'Adjective/Adverb/Pronoun',
+          text: 'Adjective/Adverb',
           handler: () => {
+            this.openNewAdjAdvModal();
           }
         },
         {
@@ -118,6 +105,51 @@ export class NotebookPage implements OnInit, OnDestroy {
     })
     .then(actionSheetEl => {
       actionSheetEl.present();
+    });
+  }
+
+  openNewAdjAdvModal(){
+    this.modalCtrl.create(
+      {component: NewAdjAdvComponent,
+      componentProps: {}}).then(modalEl =>{
+      modalEl.present();
+      return modalEl.onDidDismiss();
+    })
+    .then( resultData => {
+      if(resultData.role === 'adjective'){
+        this.loadingCtrl
+        .create({
+          message: 'Adding a adjective...'
+        })
+        .then(loadingEl =>
+          {
+            loadingEl.present();
+            const data = resultData.data
+            this.wordsService.addAdjective(data.newAdjectiveInputData)
+            .subscribe(
+            () => {
+              loadingEl.dismiss();
+            });
+          }
+        );
+      }
+      if(resultData.role === 'adverb'){
+        this.loadingCtrl
+        .create({
+          message: 'Adding a adverb...'
+        })
+        .then(loadingEl =>
+          {
+            loadingEl.present();
+            const data = resultData.data
+            this.wordsService.addAdverb(data.newAdverbInputData)
+            .subscribe(
+            () => {
+              loadingEl.dismiss();
+            });
+          }
+        );
+      }
     });
   }
 
@@ -176,5 +208,67 @@ export class NotebookPage implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  onTimeSpanChange(event: any){
+    if(!event.target.value){
+      return;
+    }
+    this.timeSpan = event.target.value
+    const now = new Date().getTime();
+    switch (this.timeSpan) {
+      case '15m':
+        this.timeSpanForFilter = new Date(now - 60*15*1000);
+        break;
+      case '1h':
+        this.timeSpanForFilter = new Date(now - 60*60*1000);
+        break;
+      case '6h':
+        this.timeSpanForFilter = new Date(now - 60*60*6*1000);
+        break;
+      case '12h':
+        this.timeSpanForFilter = new Date(now - 60*60*12*1000);
+        break;
+      case '1d':
+        this.timeSpanForFilter = new Date(now - 60*60*24*1000);
+        break;
+      case '2d':
+        this.timeSpanForFilter = new Date(now - 60*60*24*2*1000);
+        break;
+      case '1w':
+        this.timeSpanForFilter = new Date(now - 60*60*24*7*1000);
+        break;
+      case '2w':
+        this.timeSpanForFilter = new Date(now - 60*60*24*7*2*1000);
+        break;
+      case '1M':
+        this.timeSpanForFilter = new Date(now - 60*60*24*30*1000);
+        break;
+      default:
+        this.timeSpanForFilter = new Date('01-01-1999');
+        break;
+    }
+    this.filterWords();
+  }
+
+  onSearchBar(event: any){
+    if(!event.target.value){
+      this.searchValue='';
+    }
+    this.searchValue = event.target.value;
+    this.filterWords();
+  }
+
+  private filterWords() {
+    this.wordsService.words.subscribe(
+      words => {
+        this.loadedWords = words.filter(word =>
+          (
+            (word.word.includes(this.searchValue) || word.translations.some(translation => translation.includes(this.searchValue))) 
+              && word.lastUpdated > this.timeSpanForFilter
+          )
+        );
+      }
+    )
   }
 }

@@ -8,6 +8,7 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
 import { NotebookPageRoutingModule } from './notebook-routing.module';
 import { NewNounComponent } from './new-noun/new-noun.component';
 import { NewVerbComponent } from './new-verb/new-verb.component';
+import { NewAdjAdvComponent } from './new-adj-adv/new-adj-adv.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { NewVerbComponent } from './new-verb/new-verb.component';
     ExploreContainerComponentModule,
     NotebookPageRoutingModule,
   ],
-  declarations: [NotebookPage, NewNounComponent, NewVerbComponent],
-  entryComponents: [NewNounComponent, NewVerbComponent]
+  declarations: [NotebookPage, NewNounComponent, NewVerbComponent, NewAdjAdvComponent],
+  entryComponents: [NewNounComponent, NewVerbComponent, NewAdjAdvComponent]
 })
 export class NotebookPageModule {}

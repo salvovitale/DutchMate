@@ -12,6 +12,14 @@ import { PresentConjComponent } from './present-conj/present-conj.component';
 import { PresentPerfectConjComponent } from './present-perfect-conj/present-perfect-conj.component';
 import { SimplePastConjComponent } from './simple-past-conj/simple-past-conj.component';
 import { PastPerfectConjComponent } from './past-perfect-conj/past-perfect-conj.component';
+import { SimpleFutureConjComponent } from './simple-future-conj/simple-future-conj.component';
+import { FuturePerfectConjComponent } from './future-perfect-conj/future-perfect-conj.component';
+import { ConditionalPresentConjComponent } from './conditional-present-conj/conditional-present-conj.component';
+import { ConditionalPastConjComponent } from './conditional-past-conj/conditional-past-conj.component';
+import { ImperativeConjComponent } from './imperative-conj/imperative-conj.component';
+import { ImperativePronounsComponent } from './imperative-pronouns/imperative-pronouns.component';
+import { GeneralFormsComponent } from './general-forms/general-forms.component';
+import { GeneralFormsConjComponent } from './general-forms-conj/general-forms-conj.component';
 
 @NgModule({
   imports: [
@@ -20,6 +28,11 @@ import { PastPerfectConjComponent } from './past-perfect-conj/past-perfect-conj.
     IonicModule,
     VerbDetailPageRoutingModule
   ],
-  declarations: [VerbDetailPage, PersonalPronounsComponent, PresentConjComponent, PresentPerfectConjComponent, SimplePastConjComponent, PastPerfectConjComponent]
+  declarations: [VerbDetailPage, PersonalPronounsComponent, PresentConjComponent,
+                 PresentPerfectConjComponent, SimplePastConjComponent, PastPerfectConjComponent,
+                 SimpleFutureConjComponent, FuturePerfectConjComponent,
+                 ConditionalPresentConjComponent, ConditionalPastConjComponent,
+                 ImperativePronounsComponent, ImperativeConjComponent,
+                 GeneralFormsComponent, GeneralFormsConjComponent]
 })
 export class VerbDetailPageModule {}

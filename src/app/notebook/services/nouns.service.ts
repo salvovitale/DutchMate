@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { take, tap, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { NounInput } from '../wordInput.module';
 
 interface NounData {

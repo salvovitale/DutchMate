@@ -38,3 +38,28 @@ export class VerbInput extends WordInput {
     super(word, translations, kind, examples);
   }
 }
+
+export class AdjectiveInput extends WordInput {
+  constructor(
+    public word: string,
+    public translations: string,
+    public kind: KindWord,
+    public examples: string,
+    public eForm: string,
+    public isAlsoAdverb: boolean,
+    public adverbTranslations: string,
+  ) {
+    super(word, translations, kind, examples);
+  }
+}
+
+export class AdverbInput extends WordInput {
+  constructor(
+    public word: string,
+    public translations: string,
+    public kind: KindWord,
+    public examples: string,
+  ) {
+    super(word, translations, kind, examples);
+  }
+}
