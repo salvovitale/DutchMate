@@ -250,6 +250,9 @@ export class NotebookPage implements OnInit, OnDestroy {
       case '1M':
         this.timeSpanForFilter = new Date(now - 60*60*24*30*1000);
         break;
+      case 'all':
+        this.timeSpanForFilter = new Date('01-01-1999');
+        break;
       default:
         this.timeSpanForFilter = new Date('01-01-1999');
         break;
