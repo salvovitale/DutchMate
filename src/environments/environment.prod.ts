@@ -5,6 +5,6 @@ export const environment = {
   signInUrl: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
   sendResetPasswordUrl: 'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode',
   refreshTokenUrl:'https://securetoken.googleapis.com/v1/token',
-  firebaseAPIKey: '',
+  firebaseAPIKey: 'AIzaSyBOWwxwAdPRg0ktcDhdLI8SwT8CngOp7E4',
   authDataStoreKey: 'dutchMateAuthData'
 };
