@@ -42,7 +42,6 @@ export class AuthPage implements OnInit {
           authObs = this.authService.signUp(email, password);
         }
         authObs.subscribe(resData => {
-          // console.log(resData);
           loadingEl.dismiss();
           this.router.navigateByUrl('/tabs/notebook', { skipLocationChange: false });
           form.reset();

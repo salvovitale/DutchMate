@@ -20,6 +20,7 @@ export class NotebookPage implements OnInit, OnDestroy {
   timeSpan= 'all';
   timeSpanForFilter = new Date('01-01-1999');
   searchValue='';
+  isLoading = false;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -35,7 +36,7 @@ export class NotebookPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {;
+  ngOnInit(): void {
     this._wordsSub = this.wordsService.words.subscribe(
       words => {
         this.loadedWords = words;
@@ -44,7 +45,12 @@ export class NotebookPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(){
-    this.wordsService.fetchWords().subscribe();
+    this.isLoading = true
+    this.wordsService.fetchWords().subscribe(
+      () =>{
+        this.isLoading = false;
+      }
+    );
   }
 
   getRoute(kind: KindWord){
