@@ -36,9 +36,16 @@ export class VerbsService {
 
   addVerb(verbDataInput: VerbInput){
     let separatedTranslation = verbDataInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
-    let generatedId : string;
+    let fetchedToken : string;
     let newVerb: Verb;
-    return this.authService.userId.pipe(
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.authService.userId;
+        }
+      ),
       take(1),
       switchMap(
         userId =>{
@@ -60,7 +67,7 @@ export class VerbsService {
             0
           )
           return this.http.post<{name: string}>(
-            `${environment.databaseUrl}/verbs.json`,
+            `${environment.databaseUrl}/verbs.json?auth=${fetchedToken}`,
             {...newVerb, id: null}
           )
         }
@@ -75,12 +82,19 @@ export class VerbsService {
   }
 
   fetchVerbs(){
+    let fetchedUserId: string;
     return this.authService.userId.pipe(
       take(1),
       switchMap(
         userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
+      switchMap(
+        token =>{
           return this.http.get<{[key: string]:VerbData}>(
-            `${environment.databaseUrl}/verbs.json?orderBy="userId"&equalTo="${userId}"`
+            `${environment.databaseUrl}/verbs.json?orderBy="userId"&equalTo="${fetchedUserId}"&auth=${token}`
           )
         }
       ),
@@ -115,15 +129,28 @@ export class VerbsService {
   }
 
   deleteVerb(id: string){
-    return this.http.delete(
-      `${environment.databaseUrl}/verbs/${id}.json`
-    )
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.delete(
+            `${environment.databaseUrl}/verbs/${id}.json?auth=${token}`
+          );
+        }
+      )
+    );
   }
 
   getVerb(id: string) {
-    return this.http.get<VerbData>(
-      `${environment.databaseUrl}/verbs/${id}.json`,
-    ).pipe(
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.get<VerbData>(
+            `${environment.databaseUrl}/verbs/${id}.json?auth=${token}`,
+          )
+        }
+      ),
       map(
         verbData =>{
           return new Verb(
@@ -150,7 +177,15 @@ export class VerbsService {
 
   updateVerb(id: string, verbInput: VerbInput){
     let separatedTranslation = verbInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
-    return this.getVerb(id).pipe(
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getVerb(id);
+        }
+      ),
       switchMap(
         oldVerb => {
           let updatedVerb = new Verb(
@@ -171,7 +206,7 @@ export class VerbsService {
             oldVerb.knowledgeStrength
           );
           return this.http.put(
-            `${environment.databaseUrl}/verbs/${id}.json`,
+            `${environment.databaseUrl}/verbs/${id}.json?auth=${fetchedToken}`,
             {...updatedVerb, id: null}
           )
         }

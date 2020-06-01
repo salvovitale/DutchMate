@@ -37,8 +37,16 @@ export class AdjectivesService {
     if(adjectiveDataInput.adverbTranslations && adjectiveDataInput.adverbTranslations.length > 0){
       separatedAdverbTranslations = adjectiveDataInput.adverbTranslations.split(',').map(s => s.trim()).filter(el => el !== '');
     }
+    let fetchedToken : string;
     let newAdjective: Adjective;
-    return this.authService.userId.pipe(
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.authService.userId;
+        }
+      ),
       take(1),
       switchMap(
         userId =>{
@@ -57,7 +65,7 @@ export class AdjectivesService {
             0
           )
           return this.http.post<{name: string}>(
-            `${environment.databaseUrl}/adjectives.json`,
+            `${environment.databaseUrl}/adjectives.json?auth=${fetchedToken}`,
             {...newAdjective, id: null}
           )
         }
@@ -72,12 +80,19 @@ export class AdjectivesService {
   }
 
   fetchAdjectives(){
+    let fetchedUserId: string;
     return this.authService.userId.pipe(
       take(1),
       switchMap(
         userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
+      switchMap(
+        token =>{
           return this.http.get<{[key: string]:AdjectiveData}>(
-            `${environment.databaseUrl}/adjectives.json?orderBy="userId"&equalTo="${userId}"`
+            `${environment.databaseUrl}/adjectives.json?orderBy="userId"&equalTo="${fetchedUserId}"&auth=${token}`
           )
         }
       ),

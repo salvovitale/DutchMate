@@ -31,7 +31,15 @@ export class AdverbsService {
   addAdverb(adjectiveDataInput: AdverbInput){
     let separatedTranslations = adjectiveDataInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
     let newAdverb: Adverb;
-    return this.authService.userId.pipe(
+    let fetchedToken : string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.authService.userId;
+        }
+      ),
       take(1),
       switchMap(
         userId =>{
@@ -47,7 +55,7 @@ export class AdverbsService {
             0
           )
           return this.http.post<{name: string}>(
-            `${environment.databaseUrl}/adverbs.json`,
+            `${environment.databaseUrl}/adverbs.json?auth=${fetchedToken}`,
             {...newAdverb, id: null}
           )
         }
@@ -62,12 +70,19 @@ export class AdverbsService {
   }
 
   fetchAdverbs(){
+    let fetchedUserId: string;
     return this.authService.userId.pipe(
       take(1),
       switchMap(
         userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
+      switchMap(
+        token =>{
           return this.http.get<{[key: string]:AdverbData}>(
-            `${environment.databaseUrl}/adverbs.json?orderBy="userId"&equalTo="${userId}"`
+            `${environment.databaseUrl}/adverbs.json?orderBy="userId"&equalTo="${fetchedUserId}"&auth=${token}`
           )
         }
       ),
