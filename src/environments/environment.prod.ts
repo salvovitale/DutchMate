@@ -1,8 +1,10 @@
 export const environment = {
   production: true,
-  databaseUrl: 'add url',
-  signUpUrl: 'add url',
-  signInUrl: 'add url',
-  firebaseAPIKey: 'add key',
-  authDataStoreKey: 'add store key'
+  databaseUrl: 'https://dutchmate-34eb5.firebaseio.com',
+  signUpUrl: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp',
+  signInUrl: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
+  sendResetPasswordUrl: 'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode',
+  refreshTokenUrl:'https://securetoken.googleapis.com/v1/token',
+  firebaseAPIKey: 'AIzaSyBOWwxwAdPRg0ktcDhdLI8SwT8CngOp7E4',
+  authDataStoreKey: 'dutchMateAuthData'
 };
