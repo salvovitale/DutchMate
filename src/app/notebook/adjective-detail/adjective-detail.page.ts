@@ -70,13 +70,13 @@ export class AdjectiveDetailPage implements OnInit {
     });
   }
 
-  onEditNoun(id: string){
+  onEditAdj(id: string){
     this.router.navigate(['/','tabs','notebook','adjectives','edit', id]);
   }
 
   private delete(adjId: string){
     this.loadingCtrl.create({
-      message: 'Deleting noun...'
+      message: 'Deleting adjective...'
     })
     .then(loadingEl => {
       loadingEl.present();

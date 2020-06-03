@@ -148,6 +148,22 @@ export class WordsService {
     )
   }
 
+  deleteAdverb(id: string){
+    return this.adverbsService.deleteAdverb(id).pipe(
+      switchMap(
+        () => {
+          return this.words;
+        }
+      ),
+      take(1),
+      tap(
+        words =>{
+          this._words.next(words.filter(word => word.id !== id));
+        }
+      )
+    )
+  }
+
   fetchWords(){
     let fetchedNouns = []
     let fetchedAdjectives = [];
