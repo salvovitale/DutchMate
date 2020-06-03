@@ -22,6 +22,14 @@ const routes: Routes = [
   {
     path: 'verbs/edit/:verbId',
     loadChildren: () => import('./edit-verb/edit-verb.module').then( m => m.EditVerbPageModule)
+  },
+  {
+    path: 'adjectives/:adjId',
+    loadChildren: () => import('./adjective-detail/adjective-detail.module').then( m => m.AdjectiveDetailPageModule)
+  },
+  {
+    path: 'adverbs/:advId',
+    loadChildren: () => import('./adverb-detail/adverb-detail.module').then( m => m.AdverbDetailPageModule)
   }
 ];
 
