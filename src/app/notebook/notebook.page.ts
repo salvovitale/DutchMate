@@ -57,10 +57,10 @@ export class NotebookPage implements OnInit, OnDestroy {
     switch (kind) {
       case KindWord.Noun:
         return 'nouns';
-        break;
       case KindWord.Verb:
         return 'verbs';
-        break;
+      case KindWord.Adjective:
+        return 'adjectives';
       default:
         return 'words'
         break;
