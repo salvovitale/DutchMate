@@ -5,7 +5,6 @@ import { User } from './user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Plugins } from '@capacitor/core'
-import { environment_keys } from 'src/environments/environment_keys';
 
 export interface AuthResponseData {
   idToken: string,
@@ -110,7 +109,7 @@ export class AuthService {
 
   signUp(email: string, password: string){
     return this.http.post<AuthResponseData>(
-      `${environment.signUpUrl}?key=${environment_keys.firebaseAPIKey}`,
+      `${environment.signUpUrl}?key=${environment.firebaseAPIKey}`,
       {
         email: email,
         password: password,
@@ -121,7 +120,7 @@ export class AuthService {
 
   logIn(email: string, password: string){
     return this.http.post<AuthResponseData>(
-      `${environment.signInUrl}?key=${environment_keys.firebaseAPIKey}`,
+      `${environment.signInUrl}?key=${environment.firebaseAPIKey}`,
       {
         email: email,
         password: password,
@@ -141,7 +140,7 @@ export class AuthService {
 
   sendPasswordResetEmail(email: string){
     return this.http.post<{email: string}>(
-      `${environment.sendResetPasswordUrl}?key=${environment_keys.firebaseAPIKey}`,
+      `${environment.sendResetPasswordUrl}?key=${environment.firebaseAPIKey}`,
       {
         requestType: "PASSWORD_RESET",
         email: email
@@ -163,7 +162,7 @@ export class AuthService {
              if(user){
               retrievedUser = user;
               return this.http.post<RefreshTokenResponseData>(
-                `${environment.refreshTokenUrl}?key=${environment_keys.firebaseAPIKey}`,
+                `${environment.refreshTokenUrl}?key=${environment.firebaseAPIKey}`,
                 {
                   grant_type: "refresh_token",
                   refresh_token: user.refreshToken
