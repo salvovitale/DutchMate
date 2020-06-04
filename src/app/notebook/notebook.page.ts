@@ -18,7 +18,7 @@ export class NotebookPage implements OnInit, OnDestroy {
   loadedWords : Word[];
   private _wordsSub: Subscription;
   timeSpan= 'all';
-  timeSpanForFilter = new Date('01-01-1999');
+  timeSpanForFilter = new Date('01-01-2020');
   searchValue='';
   isLoading = false;
 
@@ -253,10 +253,10 @@ export class NotebookPage implements OnInit, OnDestroy {
         this.timeSpanForFilter = new Date(now - 60*60*24*30*1000);
         break;
       case 'all':
-        this.timeSpanForFilter = new Date('01-01-1999');
+        this.timeSpanForFilter = new Date('01-01-2020');
         break;
       default:
-        this.timeSpanForFilter = new Date('01-01-1999');
+        this.timeSpanForFilter = new Date('01-01-2020');
         break;
     }
     this.filterWords();
