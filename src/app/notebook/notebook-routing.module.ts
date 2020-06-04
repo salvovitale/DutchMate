@@ -4,7 +4,7 @@ import { NotebookPage } from './notebook.page';
 
 const routes: Routes = [
   {
-    path: '**',
+    path: '',
     component: NotebookPage,
   },
   {
