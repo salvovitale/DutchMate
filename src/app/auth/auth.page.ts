@@ -23,7 +23,7 @@ export class AuthPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.router.navigateByUrl('/tabs/notebook');
+    this.router.navigateByUrl('/tabs/notebook');
   }
 
   authenticate(email: string, password: string, form: NgForm){
