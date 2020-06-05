@@ -30,6 +30,10 @@ const routes: Routes = [
   {
     path: 'adverbs/:advId',
     loadChildren: () => import('./adverb-detail/adverb-detail.module').then( m => m.AdverbDetailPageModule)
+  },
+  {
+    path: 'words/edit/:wordId/kind/:kindId',
+    loadChildren: () => import('./edit-word/edit-word.module').then( m => m.EditWordPageModule)
   }
 ];
 
