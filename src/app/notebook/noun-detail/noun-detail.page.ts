@@ -45,25 +45,36 @@ export class NounDetailPage implements OnInit {
         this.noun = noun;
         this.isLoading = false;
       }
-      // error => {
-      //   this.alertCtrl.create({
-      //     header: 'An error occurred!',
-      //     message: 'Word could not be fetched. Please try again later.',
-      //     buttons: [{
-      //       text: 'Ok',
-      //       handler: () => {
-      //         this.router.navigate(['/tabs/notebook']);
-      //         this.isLoading = false;
-      //       }
-      //     }]
-      //   }).then(alertEl =>{
-      //     alertEl.present();
-      //   });
-      // }
     )
   }
 
   onDelete(nounId: string){
+    this.alertCtrl.create({
+      header: 'Delete Noun',
+      message: 'Are you sure you want to delete this noun?',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.delete(nounId);
+          }
+        },
+        {
+          text: 'No',
+          role: 'cancel'
+        }
+
+    ]
+    }).then(alertEl =>{
+      alertEl.present();
+    });
+  }
+
+  onEditNoun(id: string){
+    this.router.navigate(['/','tabs','notebook','nouns','edit', id]);
+  }
+
+  private delete(nounId: string){
     this.loadingCtrl.create({
       message: 'Deleting noun...'
     })
@@ -74,9 +85,5 @@ export class NounDetailPage implements OnInit {
         this.navCtrl.navigateBack('/tabs/notebook');
       });
     })
-  }
-
-  onEditNoun(id: string){
-    this.router.navigate(['/','tabs','notebook','nouns','edit', id]);
   }
 }

@@ -18,8 +18,9 @@ export class NotebookPage implements OnInit, OnDestroy {
   loadedWords : Word[];
   private _wordsSub: Subscription;
   timeSpan= 'all';
-  timeSpanForFilter = new Date('01-01-1999');
+  timeSpanForFilter = new Date('01-01-2020');
   searchValue='';
+  isLoading = false;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -35,7 +36,7 @@ export class NotebookPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {;
+  ngOnInit(): void {
     this._wordsSub = this.wordsService.words.subscribe(
       words => {
         this.loadedWords = words;
@@ -44,17 +45,24 @@ export class NotebookPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(){
-    this.wordsService.fetchWords().subscribe();
+    this.isLoading = true
+    this.wordsService.fetchWords().subscribe(
+      () =>{
+        this.isLoading = false;
+      }
+    );
   }
 
   getRoute(kind: KindWord){
     switch (kind) {
       case KindWord.Noun:
         return 'nouns';
-        break;
       case KindWord.Verb:
         return 'verbs';
-        break;
+      case KindWord.Adjective:
+        return 'adjectives';
+      case KindWord.Adverb:
+        return 'adverbs';
       default:
         return 'words'
         break;
@@ -244,8 +252,11 @@ export class NotebookPage implements OnInit, OnDestroy {
       case '1M':
         this.timeSpanForFilter = new Date(now - 60*60*24*30*1000);
         break;
+      case 'all':
+        this.timeSpanForFilter = new Date('01-01-2020');
+        break;
       default:
-        this.timeSpanForFilter = new Date('01-01-1999');
+        this.timeSpanForFilter = new Date('01-01-2020');
         break;
     }
     this.filterWords();

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../auth/auth.service';
 import { AdverbInput } from '../wordInput.module';
 import { Adverb, KindWord } from '../word.module';
-import { take, switchMap } from 'rxjs/operators';
+import { take, switchMap, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { of } from 'rxjs';
 
@@ -108,5 +108,46 @@ export class AdverbsService {
         }
       )
     )
+  }
+
+  getAdverb(id: string) {
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.get<AdverbData>(
+            `${environment.databaseUrl}/adverbs/${id}.json?auth=${token}`
+          )
+        }
+      ),
+      map(
+        adjectiveData =>{
+          return new Adverb(
+            id,
+            adjectiveData.userId,
+            adjectiveData.word,
+            adjectiveData.translations,
+            +adjectiveData.kind,
+            adjectiveData.examples,
+            new Date(adjectiveData.firstAdded),
+            new Date(adjectiveData.lastUpdated),
+            +adjectiveData.knowledgeStrength
+          )
+        }
+      )
+    )
+  }
+
+  deleteAdverb(id: string){
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.delete(
+            `${environment.databaseUrl}/adverbs/${id}.json?auth=${token}`
+          );
+        }
+      )
+    );
   }
 }

@@ -23,11 +23,11 @@ export class AuthPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.router.navigateByUrl('/tabs/notebook');    
+    this.router.navigateByUrl('/tabs/notebook');
   }
 
-  authenticate(email: string, password: string){
-    
+  authenticate(email: string, password: string, form: NgForm){
+
     // this.isLoading = true;
     // I am using a programmatically created component rather then the spinner component
     // In this way I cannot do anything untill the loading is done
@@ -42,9 +42,9 @@ export class AuthPage implements OnInit {
           authObs = this.authService.signUp(email, password);
         }
         authObs.subscribe(resData => {
-          // console.log(resData);
           loadingEl.dismiss();
-          this.router.navigateByUrl('/tabs/notebook', { skipLocationChange: false }); 
+          this.router.navigateByUrl('/tabs/notebook', { skipLocationChange: false });
+          form.reset();
         }, errRes => {
           loadingEl.dismiss();
           const code = errRes.error.error.message;
@@ -61,7 +61,7 @@ export class AuthPage implements OnInit {
               break;
             case 'INVALID_PASSWORD':
               message = 'The password is not correct.';
-              break;  
+              break;
             default:
               message = 'Authentication server failed, please try again.';
               break;
@@ -75,7 +75,7 @@ export class AuthPage implements OnInit {
     if(event.detail.value === 'login'){
       this.isLogin = true;
     }else{
-      this.isLogin = false;  
+      this.isLogin = false;
     }
   }
 
@@ -86,8 +86,7 @@ export class AuthPage implements OnInit {
     }
     const email = form.value.email;
     const password = form.value.password;
-    form.reset();
-    this.authenticate(email,password);
+    this.authenticate(email, password, form);
   }
 
   private showAlert(message: string){
