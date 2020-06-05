@@ -20,6 +20,7 @@ import { ImperativeConjComponent } from './imperative-conj/imperative-conj.compo
 import { ImperativePronounsComponent } from './imperative-pronouns/imperative-pronouns.component';
 import { GeneralFormsComponent } from './general-forms/general-forms.component';
 import { GeneralFormsConjComponent } from './general-forms-conj/general-forms-conj.component';
+import { ConjComponent } from './conj/conj.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,7 @@ import { GeneralFormsConjComponent } from './general-forms-conj/general-forms-co
     IonicModule,
     VerbDetailPageRoutingModule
   ],
-  declarations: [VerbDetailPage, PersonalPronounsComponent, PresentConjComponent,
+  declarations: [VerbDetailPage, PersonalPronounsComponent, ConjComponent, PresentConjComponent,
                  PresentPerfectConjComponent, SimplePastConjComponent, PastPerfectConjComponent,
                  SimpleFutureConjComponent, FuturePerfectConjComponent,
                  ConditionalPresentConjComponent, ConditionalPastConjComponent,

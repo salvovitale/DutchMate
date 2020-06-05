@@ -3,7 +3,7 @@ import { BehaviorSubject, from } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
 import { User } from './user.model';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { Plugins } from '@capacitor/core'
 
 export interface AuthResponseData {

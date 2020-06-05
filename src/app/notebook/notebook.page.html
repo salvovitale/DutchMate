@@ -42,7 +42,12 @@
 
 <ion-content class="ion-padding">
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="isLoading">
+      <ion-col class="ion-text-center">
+        <ion-spinner color="primary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!isLoading">
       <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
         <!-- approxItemHeight helps the virtual scroll algorithm to pre-render stuff correctly -->
         <!-- we do not need to use virtual scroll everywhere but only on long list -->

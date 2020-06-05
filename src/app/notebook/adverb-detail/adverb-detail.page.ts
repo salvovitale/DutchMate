@@ -1,67 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-import { Verb } from '../word.module';
+import { Adverb } from '../word.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, LoadingController } from '@ionic/angular';
-import { VerbsService } from '../services/verbs.service';
+import { AdverbsService } from '../services/adverbs.service';
 import { WordsService } from '../words.service';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-verb-detail',
-  templateUrl: './verb-detail.page.html',
-  styleUrls: ['./verb-detail.page.scss'],
+  selector: 'app-adverb-detail',
+  templateUrl: './adverb-detail.page.html',
+  styleUrls: ['./adverb-detail.page.scss'],
 })
-export class VerbDetailPage implements OnInit {
+export class AdverbDetailPage implements OnInit {
 
-  verb: Verb;
-  verbId: string;
-  isLoading = false;
-  showMore = false;
+  adv: Adverb;
+  advId: string;
+  isLoading =false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private verbsService: VerbsService,
+    private adverbsService: AdverbsService,
     private wordsService: WordsService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.isLoading = true;
     this.route.paramMap.pipe(
       switchMap(
         paramMap =>{
-          if(!paramMap.has('verbId')){
+          if(!paramMap.has('advId')){
             this.navCtrl.navigateBack('/tabs/notebook');
           }
-          this.verbId = paramMap.get('verbId');
-          return this.verbsService.getVerb(this.verbId);
+          this.advId = paramMap.get('advId');
+          return this.adverbsService.getAdverb(this.advId);
         }
       )
     )
     .subscribe(
-      verb =>{
-        this.verb = verb;
+      adv =>{
+        this.adv = adv;
         this.isLoading = false;
       }
     )
   }
 
-  onShowMore(){
-    this.showMore = !this.showMore;
-  }
-
-  onDelete(verbId: string){
+  onDelete(advId: string){
     this.alertCtrl.create({
-      header: 'Delete Verb',
-      message: 'Are you sure you want to delete this verb?',
+      header: 'Delete Adverb',
+      message: 'Are you sure you want to delete this adverb?',
       buttons: [
         {
           text: 'Yes',
           handler: () => {
-            this.delete(verbId);
+            this.delete(advId);
           }
         },
         {
@@ -75,20 +70,21 @@ export class VerbDetailPage implements OnInit {
     });
   }
 
-  onEditNoun(id: string){
-    this.router.navigate(['/','tabs','notebook','verbs','edit', id]);
+  onEditAdv(id: string){
+    this.router.navigate(['/','tabs','notebook','adverbs','edit', id]);
   }
 
-  private delete(verbId: string){
+  private delete(advId: string){
     this.loadingCtrl.create({
-      message: 'Deleting verb...'
+      message: 'Deleting adverb...'
     })
     .then(loadingEl => {
       loadingEl.present();
-      this.wordsService.deleteVerb(verbId).subscribe(()=>{
+      this.wordsService.deleteAdverb(advId).subscribe(()=>{
         loadingEl.dismiss();
         this.navCtrl.navigateBack('/tabs/notebook');
       });
     })
   }
+
 }

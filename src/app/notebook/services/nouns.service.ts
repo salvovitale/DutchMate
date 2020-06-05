@@ -32,9 +32,16 @@ export class NounsService {
 
   addNoun(nounDataInput: NounInput){
     let separatedTranslation = nounDataInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
-    let generatedId : string;
+    let fetchedToken : string;
     let newNoun: Noun;
-    return this.authService.userId.pipe(
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.authService.userId;
+        }
+      ),
       take(1),
       switchMap(
         userId =>{
@@ -52,7 +59,7 @@ export class NounsService {
             0
           )
           return this.http.post<{name: string}>(
-            `${environment.databaseUrl}/nouns.json`,
+            `${environment.databaseUrl}/nouns.json?auth=${fetchedToken}`,
             {...newNoun, id: null}
           )
         }
@@ -67,12 +74,19 @@ export class NounsService {
   }
 
   fetchNouns(){
+    let fetchedUserId: string;
     return this.authService.userId.pipe(
       take(1),
       switchMap(
         userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
+      switchMap(
+        token =>{
           return this.http.get<{[key: string]:NounData}>(
-            `${environment.databaseUrl}/nouns.json?orderBy="userId"&equalTo="${userId}"`
+            `${environment.databaseUrl}/nouns.json?orderBy="userId"&equalTo="${fetchedUserId}"&auth=${token}`
           )
         }
       ),
@@ -103,15 +117,28 @@ export class NounsService {
   }
 
   deleteNoun(id: string){
-    return this.http.delete(
-      `${environment.databaseUrl}/nouns/${id}.json`
-    )
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.delete(
+            `${environment.databaseUrl}/nouns/${id}.json?auth=${token}`
+          );
+        }
+      )
+    );
   }
 
   getNoun(id: string) {
-    return this.http.get<NounData>(
-      `${environment.databaseUrl}/nouns/${id}.json`,
-    ).pipe(
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.get<NounData>(
+            `${environment.databaseUrl}/nouns/${id}.json?auth=${token}`
+          )
+        }
+      ),
       map(
         nounData =>{
           return new Noun(
@@ -134,7 +161,15 @@ export class NounsService {
 
   updateNoun(id: string, nounInput: NounInput){
     let separatedTranslation = nounInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
-    return this.getNoun(id).pipe(
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getNoun(id);
+        }
+      ),
       switchMap(
         oldNoun => {
           let updatedNoun = new Noun(
@@ -151,7 +186,7 @@ export class NounsService {
             oldNoun.knowledgeStrength
           );
           return this.http.put(
-            `${environment.databaseUrl}/nouns/${id}.json`,
+            `${environment.databaseUrl}/nouns/${id}.json?auth=${fetchedToken}`,
                 {...updatedNoun, id: null}
           )
         }

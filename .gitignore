@@ -16,6 +16,9 @@ $RECYCLE.BIN/
 *.log
 log.txt
 npm-debug.log*
+.env
+package-lock.json
+environment_keys.ts
 
 /.idea
 /.ionic
