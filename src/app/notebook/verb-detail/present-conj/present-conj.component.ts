@@ -19,7 +19,7 @@ export class PresentConjComponent extends ConjComponent {
     if(this.verb.word.substring(this.verb.word.length - 3) === 'aan'){
       suffix = 'at'
     }
-    if(this.verb.firstPersonPresent.substring(this.verb.firstPersonPresent.length - 1) === 't'){
+    if(verbWords[0].substring(verbWords[0].length - 1) === 't'){
       suffix = ''
     }
     if(verbWords.length < 2){
