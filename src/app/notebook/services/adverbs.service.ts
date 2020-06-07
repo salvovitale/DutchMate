@@ -150,4 +150,37 @@ export class AdverbsService {
       )
     );
   }
+
+  updateAdverb(id: string, adverbInput: AdverbInput){
+    let separatedTranslation = adverbInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getAdverb(id);
+        }
+      ),
+      switchMap(
+        oldAdverb => {
+          let updatedAdverb = new Adverb(
+            id,
+            oldAdverb.userId,
+            adverbInput.word,
+            separatedTranslation,
+            adverbInput.kind,
+            adverbInput.examples,
+            oldAdverb.firstAdded,
+            new Date(),
+            oldAdverb.knowledgeStrength
+          );
+          return this.http.put(
+            `${environment.databaseUrl}/adverbs/${id}.json?auth=${fetchedToken}`,
+                {...updatedAdverb, id: null}
+          )
+        }
+      )
+    )
+  }
 }

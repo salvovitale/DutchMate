@@ -20,5 +20,4 @@ export class PresentPerfectConjComponent extends ConjComponent {
     this.secondPersonPlural = ((this.verb.auxVerb === 'zijn') ? 'zijn ' : 'hebben ') + this.verb.pastParticiple;
     this.thirdPersonPlural = ((this.verb.auxVerb === 'zijn') ? 'zijn ' : 'hebben ') + this.verb.pastParticiple;
   }
-
 }

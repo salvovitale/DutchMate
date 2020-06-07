@@ -28,8 +28,16 @@ const routes: Routes = [
     loadChildren: () => import('./adjective-detail/adjective-detail.module').then( m => m.AdjectiveDetailPageModule)
   },
   {
+    path: 'adjectives/edit/:adjId',
+    loadChildren: () => import('./edit-adjective/edit-adjective.module').then( m => m.EditAdjectivePageModule)
+  },
+  {
     path: 'adverbs/:advId',
     loadChildren: () => import('./adverb-detail/adverb-detail.module').then( m => m.AdverbDetailPageModule)
+  },
+  {
+    path: 'words/edit/:wordId/kind/:kindId',
+    loadChildren: () => import('./edit-word/edit-word.module').then( m => m.EditWordPageModule)
   }
 ];
 

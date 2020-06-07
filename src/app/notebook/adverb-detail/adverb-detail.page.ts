@@ -71,7 +71,7 @@ export class AdverbDetailPage implements OnInit {
   }
 
   onEditAdv(id: string){
-    this.router.navigate(['/','tabs','notebook','adverbs','edit', id]);
+    this.router.navigate(['/','tabs','notebook','words','edit', id, 'kind', 'adverbs']);
   }
 
   private delete(advId: string){
