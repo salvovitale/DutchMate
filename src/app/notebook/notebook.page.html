@@ -22,7 +22,7 @@
               <ion-icon  name="time-outline" slot="start" size="large"></ion-icon>
             </ion-label>
             <ion-select class="time-select" [value]="timeSpan" (ionChange)="onTimeSpanChange($event)">
-              <ion-select-option *ngFor="let timeSelect of timeSelects" [value]="timeSelect.value"> 
+              <ion-select-option *ngFor="let timeSelect of timeSelects" [value]="timeSelect.value">
                 {{ timeSelect.showValue}}
               </ion-select-option>
             </ion-select>
@@ -32,7 +32,7 @@
     </ion-grid>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment value="all" (ionChange)="onSwitchSegment($event)">
+    <ion-segment [value]="kindFilter" (ionChange)="onSwitchSegment($event)">
       <ion-segment-button mode="ios" *ngFor="let segment of segments" [value]="segment.value">
         <ion-label>
           {{segment.showValue}}

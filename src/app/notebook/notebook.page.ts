@@ -17,18 +17,18 @@ export class NotebookPage implements OnInit, OnDestroy {
 
   loadedWords : Word[];
   private _wordsSub: Subscription;
-  timeSpan= 'all';
-  timeSpanForFilter = new Date('01-01-2020');
+  timeSpan= '0a';
+  timeSpanForFilter = new Date(new Date().getTime() - 20*12*60*60*24*30*1000);
   searchValue='';
-  kindFilter='all';
+  kindFilter= '0a';
   isLoading = false;
-  segments = [{value: 'all', showValue: 'All'},
-                {value: 'noun', showValue: 'N'},
-                {value: 'verb', showValue: 'V'},
-                {value: 'adjadv', showValue: 'A/A'},
-                {value: 'propconj', showValue: 'P/C'},
+  segments = [{value: '0a', showValue: 'All'},
+                {value: '1n', showValue: 'N'},
+                {value: '2v', showValue: 'V'},
+                {value: '3aa', showValue: 'A/A'},
+                {value: '4pc', showValue: 'P/C'},
               ]
-  timeSelects = [{value: 'all', showValue: 'all'},
+  timeSelects = [{value: '0a', showValue: 'all'},
                  {value: '1h', showValue: '1 h'},
                  {value: '6h', showValue: '6 h'},
                  {value: '12h', showValue: '12 h'},
@@ -266,8 +266,11 @@ export class NotebookPage implements OnInit, OnDestroy {
       case '1M':
         this.timeSpanForFilter = new Date(now - 60*60*24*30*1000);
         break;
+      case '0a':
+        this.timeSpanForFilter = new Date(now - 20*12*60*60*24*30*1000);
+        break;
       default:
-        this.timeSpanForFilter = new Date('01-01-2020');
+        this.timeSpanForFilter = new Date(now - 20*12*60*60*24*30*1000);
         break;
     }
     this.filterWords();
@@ -286,7 +289,7 @@ export class NotebookPage implements OnInit, OnDestroy {
       words => {
         this.loadedWords = words.filter(word =>
           (
-            (word.word.includes(this.searchValue) || word.translations.some(translation => translation.includes(this.searchValue))) 
+            (word.word.includes(this.searchValue) || word.translations.some(translation => translation.includes(this.searchValue)))
               && word.lastUpdated > this.timeSpanForFilter
           )
         );
@@ -297,17 +300,19 @@ export class NotebookPage implements OnInit, OnDestroy {
 
   private filterOnSegment() {
     switch (this.kindFilter) {
-      case 'noun':
+      case '1n':
         this.loadedWords = this.loadedWords.filter(w => w.kind === KindWord.Noun);
         break;
-      case 'verb':
+      case '2v':
         this.loadedWords = this.loadedWords.filter(w => w.kind === KindWord.Verb);
         break;
-      case 'adjadv':
+      case '3aa':
         this.loadedWords = this.loadedWords.filter(w => (w.kind === KindWord.Adjective || w.kind === KindWord.Adverb));
         break;
-      case 'propconj':
+      case '4pc':
         this.loadedWords = this.loadedWords.filter(w => (w.kind === KindWord.Preposition || w.kind === KindWord.Conjunction));
+        break;
+      case '0a':
         break;
       default:
         break;
