@@ -22,21 +22,23 @@
               <ion-icon  name="time-outline" slot="start" size="large"></ion-icon>
             </ion-label>
             <ion-select class="time-select" [value]="timeSpan" (ionChange)="onTimeSpanChange($event)">
-              <ion-select-option value="all">all</ion-select-option>
-              <ion-select-option value="15m">15 m</ion-select-option>
-              <ion-select-option value="1h">1 h</ion-select-option>
-              <ion-select-option value="6h">6 h</ion-select-option>
-              <ion-select-option value="12h">12 h</ion-select-option>
-              <ion-select-option value="1d">1 d</ion-select-option>
-              <ion-select-option value="2d">2 d</ion-select-option>
-              <ion-select-option value="1w">1 w</ion-select-option>
-              <ion-select-option value="2w">2 w</ion-select-option>
-              <ion-select-option value="1M">1 M</ion-select-option>
+              <ion-select-option *ngFor="let timeSelect of timeSelects" [value]="timeSelect.value"> 
+                {{ timeSelect.showValue}}
+              </ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment value="all" (ionChange)="onSwitchSegment($event)">
+      <ion-segment-button mode="ios" *ngFor="let segment of segments" [value]="segment.value">
+        <ion-label>
+          {{segment.showValue}}
+        </ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 

@@ -20,7 +20,22 @@ export class NotebookPage implements OnInit, OnDestroy {
   timeSpan= 'all';
   timeSpanForFilter = new Date('01-01-2020');
   searchValue='';
+  kindFilter='all';
   isLoading = false;
+  segments = [{value: 'all', showValue: 'All'},
+                {value: 'noun', showValue: 'N'},
+                {value: 'verb', showValue: 'V'},
+                {value: 'adjadv', showValue: 'A/A'},
+                {value: 'propconj', showValue: 'P/C'},
+              ]
+  timeSelects = [{value: 'all', showValue: 'all'},
+                 {value: '1h', showValue: '1 h'},
+                 {value: '6h', showValue: '6 h'},
+                 {value: '12h', showValue: '12 h'},
+                 {value: '1d', showValue: '1 d'},
+                 {value: '1w', showValue: '1 w'},
+                 {value: '1M', showValue: '1 M'},
+                ]
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -218,6 +233,14 @@ export class NotebookPage implements OnInit, OnDestroy {
     });
   }
 
+  onSwitchSegment(event: any){
+    if(!event.target.value){
+      return;
+    }
+    this.kindFilter = event.target.value;
+    this.filterWords();
+  }
+
   onTimeSpanChange(event: any){
     if(!event.target.value){
       return;
@@ -225,9 +248,6 @@ export class NotebookPage implements OnInit, OnDestroy {
     this.timeSpan = event.target.value
     const now = new Date().getTime();
     switch (this.timeSpan) {
-      case '15m':
-        this.timeSpanForFilter = new Date(now - 60*15*1000);
-        break;
       case '1h':
         this.timeSpanForFilter = new Date(now - 60*60*1000);
         break;
@@ -240,20 +260,11 @@ export class NotebookPage implements OnInit, OnDestroy {
       case '1d':
         this.timeSpanForFilter = new Date(now - 60*60*24*1000);
         break;
-      case '2d':
-        this.timeSpanForFilter = new Date(now - 60*60*24*2*1000);
-        break;
       case '1w':
         this.timeSpanForFilter = new Date(now - 60*60*24*7*1000);
         break;
-      case '2w':
-        this.timeSpanForFilter = new Date(now - 60*60*24*7*2*1000);
-        break;
       case '1M':
         this.timeSpanForFilter = new Date(now - 60*60*24*30*1000);
-        break;
-      case 'all':
-        this.timeSpanForFilter = new Date('01-01-2020');
         break;
       default:
         this.timeSpanForFilter = new Date('01-01-2020');
@@ -281,5 +292,25 @@ export class NotebookPage implements OnInit, OnDestroy {
         );
       }
     )
+    this.filterOnSegment();
+  }
+
+  private filterOnSegment() {
+    switch (this.kindFilter) {
+      case 'noun':
+        this.loadedWords = this.loadedWords.filter(w => w.kind === KindWord.Noun);
+        break;
+      case 'verb':
+        this.loadedWords = this.loadedWords.filter(w => w.kind === KindWord.Verb);
+        break;
+      case 'adjadv':
+        this.loadedWords = this.loadedWords.filter(w => (w.kind === KindWord.Adjective || w.kind === KindWord.Adverb));
+        break;
+      case 'propconj':
+        this.loadedWords = this.loadedWords.filter(w => (w.kind === KindWord.Preposition || w.kind === KindWord.Conjunction));
+        break;
+      default:
+        break;
+    }
   }
 }
