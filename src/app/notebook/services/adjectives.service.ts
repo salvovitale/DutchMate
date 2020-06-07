@@ -166,4 +166,44 @@ export class AdjectivesService {
       )
     );
   }
+
+  updateAdjective(id: string, adjectiveDataInput: AdjectiveInput){
+    let separatedTranslation = adjectiveDataInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
+    let separatedAdverbTranslations = [''];
+    if(adjectiveDataInput.adverbTranslations && adjectiveDataInput.adverbTranslations.length > 0){
+      separatedAdverbTranslations = adjectiveDataInput.adverbTranslations.split(',').map(s => s.trim()).filter(el => el !== '');
+    }
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getAdjective(id);
+        }
+      ),
+      switchMap(
+        oldAdj => {
+          let updatedAdverb = new Adjective(
+            id,
+            oldAdj.userId,
+            adjectiveDataInput.word,
+            separatedTranslation,
+            adjectiveDataInput.kind,
+            adjectiveDataInput.examples,
+            adjectiveDataInput.eForm,
+            adjectiveDataInput.isAlsoAdverb,
+            separatedAdverbTranslations,
+            oldAdj.firstAdded,
+            new Date(),
+            oldAdj.knowledgeStrength
+          );
+          return this.http.put(
+            `${environment.databaseUrl}/adjectives/${id}.json?auth=${fetchedToken}`,
+                {...updatedAdverb, id: null}
+          )
+        }
+      )
+    )
+  }
 }

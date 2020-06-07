@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="['tabs', 'notebook', 'adjectives', adjId]"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ adj?.word }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onUpdateAdj()" [disabled]="!form?.valid">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="isLoading" class="ion-text-center">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <form [formGroup]="form" *ngIf="!isLoading">
+    <ion-grid>
+      <ion-row>
+        <!-- like this will be center -->
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Word</ion-label>
+            <ion-input
+              type="text"
+              formControlName="word"
+              (input)="inputValidator.singleWordValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Translations</ion-label>
+            <ion-input
+              type="text"
+              formControlName="translations"
+              (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">-e Form</ion-label>
+            <ion-input
+              type="text"
+              formControlName="eForm"
+              (input)="inputValidator.singleWordValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-radio-group [value]="isAlsoAdverb" (ionChange)="onIsAlsoAdverbChange($event)">
+          <ion-list>
+              <ion-list-header>
+                <ion-label>Is Also Adverb</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-label>yes</ion-label>
+                <ion-radio slot="end" [value]="true"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>no</ion-label>
+                <ion-radio slot="end" [value]="false"></ion-radio>
+              </ion-item>
+          </ion-list>
+        </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="isAlsoAdverb">
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Adverb Translations</ion-label>
+            <ion-input
+              type="text"
+              formControlName="adverbTranslations"
+              (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Examples</ion-label>
+            <ion-textarea
+              type="text"
+              rows="3"
+              formControlName="examples"
+            ></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
