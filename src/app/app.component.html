@@ -12,7 +12,11 @@
         <!-- everything that should toogle -->
         <ion-menu-toggle>
           <ion-item lines="none" routerLink="/tabs/notebook">
-            <ion-icon name="business" slot="start"></ion-icon>
+            <ion-icon name="book" slot="start"></ion-icon>
+            <ion-label>Notebook</ion-label>
+          </ion-item>
+          <ion-item lines="none" routerLink="/about">
+            <ion-icon name="reader" slot="start"></ion-icon>
             <ion-label>About</ion-label>
           </ion-item>
           <ion-item lines="none" (click)="onLogOut()" button>
