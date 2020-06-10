@@ -4,8 +4,7 @@ export enum KindWord {
   Adjective,
   Adverb,
   Preposition,
-  Conjunction,
-  Pronoun
+  Conjunction
 }
 
 export class Word {
