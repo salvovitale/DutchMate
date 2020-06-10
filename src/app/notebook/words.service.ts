@@ -184,6 +184,22 @@ export class WordsService {
     )
   }
 
+  deleteConjProp(id: string){
+    return this.conjPropsService.deleteConjProp(id).pipe(
+      switchMap(
+        () => {
+          return this.words;
+        }
+      ),
+      take(1),
+      tap(
+        words =>{
+          this._words.next(words.filter(word => word.id !== id));
+        }
+      )
+    )
+  }
+
   fetchWords(){
     let fetchedNouns = []
     let fetchedAdjectives = [];

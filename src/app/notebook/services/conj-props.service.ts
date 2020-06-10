@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../auth/auth.service';
 import { WordInput } from '../wordInput.module';
 import { Word, KindWord } from '../word.module';
-import { take, switchMap } from 'rxjs/operators';
+import { take, switchMap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { of } from 'rxjs';
 
@@ -105,6 +105,80 @@ export class ConjPropsService {
             }
           }
           return of(conjProps);
+        }
+      )
+    )
+  }
+
+  getConjProp(id: string) {
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.get<ConjPropData>(
+            `${environment.databaseUrl}/conj-props/${id}.json?auth=${token}`
+          )
+        }
+      ),
+      map(
+        adjectiveData =>{
+          return new Word(
+            id,
+            adjectiveData.userId,
+            adjectiveData.word,
+            adjectiveData.translations,
+            +adjectiveData.kind,
+            adjectiveData.examples,
+            new Date(adjectiveData.firstAdded),
+            new Date(adjectiveData.lastUpdated),
+            +adjectiveData.knowledgeStrength
+          )
+        }
+      )
+    )
+  }
+
+  deleteConjProp(id: string){
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          return this.http.delete(
+            `${environment.databaseUrl}/conj-props/${id}.json?auth=${token}`
+          );
+        }
+      )
+    );
+  }
+
+  updateConjProp(id: string, conjPropInput: WordInput){
+    let separatedTranslation = conjPropInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getConjProp(id);
+        }
+      ),
+      switchMap(
+        oldConjProp => {
+          let updatedAdverb = new Word(
+            id,
+            oldConjProp.userId,
+            conjPropInput.word,
+            separatedTranslation,
+            conjPropInput.kind,
+            conjPropInput.examples,
+            oldConjProp.firstAdded,
+            new Date(),
+            oldConjProp.knowledgeStrength
+          );
+          return this.http.put(
+            `${environment.databaseUrl}/conj-props/${id}.json?auth=${fetchedToken}`,
+                {...updatedAdverb, id: null}
+          )
         }
       )
     )

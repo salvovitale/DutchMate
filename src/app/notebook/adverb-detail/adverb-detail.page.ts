@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Adverb } from '../word.module';
+import { Adverb, Word } from '../word.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, LoadingController } from '@ionic/angular';
 import { AdverbsService } from '../services/adverbs.service';
 import { WordsService } from '../words.service';
 import { switchMap } from 'rxjs/operators';
+import { ConjPropsService } from '../services/conj-props.service';
 
 @Component({
   selector: 'app-adverb-detail',
@@ -13,8 +14,9 @@ import { switchMap } from 'rxjs/operators';
 })
 export class AdverbDetailPage implements OnInit {
 
-  adv: Adverb;
-  advId: string;
+  word: Word;
+  wordId: string;
+  kindId: string;
   isLoading =false;
 
   constructor(
@@ -22,6 +24,7 @@ export class AdverbDetailPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private adverbsService: AdverbsService,
+    private conjPropsService: ConjPropsService,
     private wordsService: WordsService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController
@@ -32,31 +35,34 @@ export class AdverbDetailPage implements OnInit {
     this.route.paramMap.pipe(
       switchMap(
         paramMap =>{
-          if(!paramMap.has('advId')){
+          if(!paramMap.has('wordId') || !paramMap.has('kindId')){
             this.navCtrl.navigateBack('/tabs/notebook');
+            return;
           }
-          this.advId = paramMap.get('advId');
-          return this.adverbsService.getAdverb(this.advId);
+          this.wordId = paramMap.get('wordId');
+          this.kindId = paramMap.get('kindId');
+          this.isLoading = true;
+          return this.getGetWordObservable();
         }
       )
     )
     .subscribe(
-      adv =>{
-        this.adv = adv;
+      word =>{
+        this.word = word;
         this.isLoading = false;
       }
     )
   }
 
-  onDelete(advId: string){
+  onDelete(){
     this.alertCtrl.create({
-      header: 'Delete Adverb',
+      header: 'Delete Word',
       message: 'Are you sure you want to delete this adverb?',
       buttons: [
         {
           text: 'Yes',
           handler: () => {
-            this.delete(advId);
+            this.delete();
           }
         },
         {
@@ -70,21 +76,43 @@ export class AdverbDetailPage implements OnInit {
     });
   }
 
-  onEditAdv(id: string){
-    this.router.navigate(['/','tabs','notebook','words','edit', id, 'kind', 'adverbs']);
+  onEditWord(){
+    this.router.navigate(['/','tabs','notebook','words','edit', this.wordId, 'kind', this.kindId]);
   }
 
-  private delete(advId: string){
+  private delete(){
     this.loadingCtrl.create({
-      message: 'Deleting adverb...'
+      message: 'Deleting word...'
     })
     .then(loadingEl => {
       loadingEl.present();
-      this.wordsService.deleteAdverb(advId).subscribe(()=>{
+      let deleteWordObservable = this.getDeleteWordObservable();
+      deleteWordObservable.subscribe(()=>{
         loadingEl.dismiss();
         this.navCtrl.navigateBack('/tabs/notebook');
       });
     })
   }
 
+  private getGetWordObservable(){
+    switch (this.kindId) {
+      case 'adverbs':
+        return this.adverbsService.getAdverb(this.wordId);
+      case 'conj-props':
+        return this.conjPropsService.getConjProp(this.wordId);
+      default:
+        return null;
+    }
+  }
+
+  private getDeleteWordObservable(){
+    switch (this.kindId) {
+      case 'adverbs':
+        return this.wordsService.deleteAdverb(this.wordId);
+      case 'conj-props':
+        return this.wordsService.deleteConjProp(this.wordId);
+      default:
+        return null;
+    }
+  }
 }
