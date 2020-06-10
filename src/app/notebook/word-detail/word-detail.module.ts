@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AdverbDetailPageRoutingModule } from './adverb-detail-routing.module';
+import { WordDetailPageRoutingModule } from './word-detail-routing.module';
 
-import { AdverbDetailPage } from './adverb-detail.page';
+import { WordDetailPage } from './word-detail.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AdverbDetailPageRoutingModule
+    WordDetailPageRoutingModule
   ],
-  declarations: [AdverbDetailPage]
+  declarations: [WordDetailPage]
 })
-export class AdverbDetailPageModule {}
+export class WordDetailPageModule {}

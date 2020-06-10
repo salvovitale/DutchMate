@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'words/:wordId/kind/:kindId',
-    loadChildren: () => import('./adverb-detail/adverb-detail.module').then( m => m.AdverbDetailPageModule)
+    loadChildren: () => import('./word-detail/word-detail.module').then( m => m.WordDetailPageModule)
   },
   {
     path: 'words/edit/:wordId/kind/:kindId',

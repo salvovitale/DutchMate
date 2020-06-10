@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Adverb, Word } from '../word.module';
+import { Word } from '../word.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, LoadingController } from '@ionic/angular';
 import { AdverbsService } from '../services/adverbs.service';
@@ -9,10 +9,10 @@ import { ConjPropsService } from '../services/conj-props.service';
 
 @Component({
   selector: 'app-adverb-detail',
-  templateUrl: './adverb-detail.page.html',
-  styleUrls: ['./adverb-detail.page.scss'],
+  templateUrl: './word-detail.page.html',
+  styleUrls: ['./word-detail.page.scss'],
 })
-export class AdverbDetailPage implements OnInit {
+export class WordDetailPage implements OnInit {
 
   word: Word;
   wordId: string;

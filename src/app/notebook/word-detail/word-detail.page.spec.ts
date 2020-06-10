@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AdverbDetailPage } from './adverb-detail.page';
+import { WordDetailPage } from './word-detail.page';
 
-describe('AdverbDetailPage', () => {
-  let component: AdverbDetailPage;
-  let fixture: ComponentFixture<AdverbDetailPage>;
+describe('WordDetailPage', () => {
+  let component: WordDetailPage;
+  let fixture: ComponentFixture<WordDetailPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdverbDetailPage ],
+      declarations: [ WordDetailPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdverbDetailPage);
+    fixture = TestBed.createComponent(WordDetailPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
