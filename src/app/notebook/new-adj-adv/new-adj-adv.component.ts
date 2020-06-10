@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { InputValidator } from 'src/app/shared/util/inputValidator';
-import { Adjective, KindWord } from '../word.module';
+import { KindWord } from '../word.module';
 import { AdjectiveInput, AdverbInput } from '../wordInput.module';
 
 @Component({

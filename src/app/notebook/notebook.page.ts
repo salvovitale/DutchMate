@@ -7,6 +7,7 @@ import { WordsService } from './words.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { NewAdjAdvComponent } from './new-adj-adv/new-adj-adv.component';
+import { NewConjPropComponent } from './new-conj-prop/new-conj-prop.component';
 
 @Component({
   selector: 'app-notebook',
@@ -52,9 +53,12 @@ export class NotebookPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this._wordsSub = this.wordsService.words.subscribe(
       words => {
         this.loadedWords = words;
+        this.filterWords();
+        this.isLoading = false;
       }
     )
   }
@@ -63,24 +67,24 @@ export class NotebookPage implements OnInit, OnDestroy {
     this.isLoading = true
     this.wordsService.fetchWords().subscribe(
       () =>{
+        this.filterWords();
         this.isLoading = false;
       }
     );
   }
 
-  getRoute(kind: KindWord){
+  getRoute(kind: KindWord, id: string){
     switch (kind) {
       case KindWord.Noun:
-        return 'nouns';
+        return ['nouns', id];
       case KindWord.Verb:
-        return 'verbs';
+        return ['verbs', id];
       case KindWord.Adjective:
-        return 'adjectives';
+        return ['adjectives', id];
       case KindWord.Adverb:
-        return 'adverbs';
+        return ['words', id, 'kind', 'adverbs'];
       default:
-        return 'words'
-        break;
+        return ['words', id, 'kind', 'conj-props'];
     }
   }
 
@@ -118,6 +122,7 @@ export class NotebookPage implements OnInit, OnDestroy {
         {
           text: 'Preposition/Conjunction',
           handler: () => {
+            this.openNewConjPropModal()
           }
         },
         {
@@ -128,6 +133,36 @@ export class NotebookPage implements OnInit, OnDestroy {
     })
     .then(actionSheetEl => {
       actionSheetEl.present();
+    });
+  }
+
+  openNewConjPropModal(){
+    this.modalCtrl.create(
+      {component: NewConjPropComponent,
+      componentProps: {}}).then(modalEl =>{
+      modalEl.present();
+      return modalEl.onDidDismiss();
+    })
+    .then( resultData => {
+      if(resultData.role === 'confirm'){
+        this.loadingCtrl
+        .create({
+          message: 'Adding a word...'
+        })
+        .then(loadingEl =>
+          {
+            loadingEl.present();
+            const data = resultData.data
+            this.wordsService.addConjProp(data.newConjPropInput)
+            .subscribe(
+            () => {
+              this.filterWords();
+              loadingEl.dismiss();
+            });
+          }
+        );
+      }
+
     });
   }
 
@@ -151,6 +186,7 @@ export class NotebookPage implements OnInit, OnDestroy {
             this.wordsService.addAdjective(data.newAdjectiveInputData)
             .subscribe(
             () => {
+              this.filterWords();
               loadingEl.dismiss();
             });
           }
@@ -168,6 +204,7 @@ export class NotebookPage implements OnInit, OnDestroy {
             this.wordsService.addAdverb(data.newAdverbInputData)
             .subscribe(
             () => {
+              this.filterWords();
               loadingEl.dismiss();
             });
           }
@@ -196,6 +233,7 @@ export class NotebookPage implements OnInit, OnDestroy {
             this.wordsService.addVerb(data.newVerbInputData)
             .subscribe(
             () => {
+              this.filterWords();
               loadingEl.dismiss();
             });
           }
@@ -225,6 +263,7 @@ export class NotebookPage implements OnInit, OnDestroy {
             this.wordsService.addNoun(data.newNounInputData)
             .subscribe(
             () => {
+              this.filterWords();
               loadingEl.dismiss();
             });
           }

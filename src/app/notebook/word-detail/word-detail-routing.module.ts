@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AdverbDetailPage } from './adverb-detail.page';
+import { WordDetailPage } from './word-detail.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: AdverbDetailPage
+    component: WordDetailPage
   }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AdverbDetailPageRoutingModule {}
+export class WordDetailPageRoutingModule {}

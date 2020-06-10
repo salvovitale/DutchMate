@@ -56,7 +56,7 @@
         <ion-virtual-scroll [items]="loadedWords" approxItemHeight="100px">
           <ion-item
             *virtualItem="let word"
-            [routerLink]="[getRoute(word.kind),word.id]"
+            [routerLink]="getRoute(word.kind, word.id)"
             detail
           >
             <ion-label>

@@ -5,10 +5,11 @@ import { BehaviorSubject } from 'rxjs';
 import { take, tap, delay, map, switchMap } from 'rxjs/operators';
 import { NounsService } from './services/nouns.service';
 import { Router } from '@angular/router';
-import { NounInput, VerbInput, AdjectiveInput, AdverbInput } from './wordInput.module';
+import { NounInput, VerbInput, AdjectiveInput, AdverbInput, WordInput } from './wordInput.module';
 import { VerbsService } from './services/verbs.service';
 import { AdjectivesService } from './services/adjectives.service';
 import { AdverbsService } from './services/adverbs.service';
+import { ConjPropsService } from './services/conj-props.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class WordsService {
     private verbsService: VerbsService,
     private adjectivesService: AdjectivesService,
     private adverbsService: AdverbsService,
+    private conjPropsService: ConjPropsService,
     private router: Router) { }
 
   get words(){
@@ -164,10 +166,45 @@ export class WordsService {
     )
   }
 
+  addConjProp(conjPropInput: WordInput){
+    return this.conjPropsService.addConjProp(conjPropInput).pipe(
+      switchMap(
+        newConjProp => {
+          return this.words.pipe(
+            take(1),
+            tap(
+              words => {
+                this._words.next(words.concat(newConjProp));
+                // this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
+              }
+            )
+          )
+        }
+      )
+    )
+  }
+
+  deleteConjProp(id: string){
+    return this.conjPropsService.deleteConjProp(id).pipe(
+      switchMap(
+        () => {
+          return this.words;
+        }
+      ),
+      take(1),
+      tap(
+        words =>{
+          this._words.next(words.filter(word => word.id !== id));
+        }
+      )
+    )
+  }
+
   fetchWords(){
     let fetchedNouns = []
     let fetchedAdjectives = [];
     let fetchedAdverbs = [];
+    let fetchedConjProps = []
     return this.nounsService.fetchNouns().pipe(
       switchMap(
         nouns => {
@@ -184,12 +221,24 @@ export class WordsService {
       switchMap(
         adverbs => {
           fetchedAdverbs = adverbs;
+          return this.conjPropsService.fetchConjProps();
+          // return this.verbsService.fetchVerbs();
+        }
+      ),
+      switchMap(
+        conjProps => {
+          fetchedConjProps = conjProps;
           return this.verbsService.fetchVerbs();
         }
       ),
       tap(
         verbs =>{
-          this._words.next(fetchedNouns.concat(fetchedAdjectives).concat(fetchedAdverbs).concat(verbs).sort((a,b) => (a.word > b.word) ? 1 : ((b.word > a.word) ? -1 : 0)));
+          this._words.next(fetchedNouns
+            .concat(fetchedAdjectives)
+            .concat(fetchedAdverbs)
+            .concat(fetchedConjProps)
+            .concat(verbs)
+            .sort((a,b) => (a.word > b.word) ? 1 : ((b.word > a.word) ? -1 : 0)));
         }
       )
     )

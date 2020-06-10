@@ -7,6 +7,7 @@ import { NavController, LoadingController, AlertController } from '@ionic/angula
 import { InputValidator } from 'src/app/shared/util/inputValidator';
 import { Subscription } from 'rxjs';
 import { WordInput } from '../wordInput.module';
+import { ConjPropsService } from '../services/conj-props.service';
 
 @Component({
   selector: 'app-edit-word',
@@ -17,6 +18,7 @@ export class EditWordPage implements OnInit, OnDestroy {
 
   word: Word
   form: FormGroup
+  kind: KindWord
   wordId: string;
   kindId: string
   isLoading = false;
@@ -27,6 +29,7 @@ export class EditWordPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private adverbsService: AdverbsService,
+    private conjPropsService: ConjPropsService,
     private router: Router,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
@@ -46,6 +49,7 @@ export class EditWordPage implements OnInit, OnDestroy {
       let getWordById = this.getGetWordObservable();
       this.myGetSub = getWordById.subscribe(word => {
         this.word = word;
+        this.kind = word.kind;
         this.form = new FormGroup({
           word: new FormControl(this.word.word, {
             updateOn: 'blur',
@@ -97,7 +101,7 @@ export class EditWordPage implements OnInit, OnDestroy {
       const wordEdited = new WordInput(
         this.form.value.word,
         this.form.value.translations,
-        this.getKindOfWord(),
+        this.kind,
         this.form.value.examples,
       );
       let updateWord = this.getUpdateWordObservable(wordEdited);
@@ -106,7 +110,7 @@ export class EditWordPage implements OnInit, OnDestroy {
         {
           loadingEl.dismiss();
           this.form.reset();
-          this.router.navigate(['/','tabs','notebook',this.kindId, this.wordId]);
+          this.router.navigate(['/','tabs','notebook', 'words', this.wordId, 'kind', this.kindId]);
         }
       );
     })
@@ -116,6 +120,8 @@ export class EditWordPage implements OnInit, OnDestroy {
     switch (this.kindId) {
       case 'adverbs':
         return this.adverbsService.getAdverb(this.wordId);
+      case 'conj-props':
+        return this.conjPropsService.getConjProp(this.wordId);
       default:
         return null;
     }
@@ -125,18 +131,10 @@ export class EditWordPage implements OnInit, OnDestroy {
     switch (this.kindId) {
       case 'adverbs':
         return this.adverbsService.updateAdverb(this.wordId, wordEdited);
+      case 'conj-props':
+        return this.conjPropsService.updateConjProp(this.wordId, wordEdited);
       default:
         return null;
     }
   }
-
-  private getKindOfWord(){
-    switch (this.kindId) {
-      case 'adverbs':
-        return KindWord.Adverb
-      default:
-        return null;
-    }
-  }
-
 }
