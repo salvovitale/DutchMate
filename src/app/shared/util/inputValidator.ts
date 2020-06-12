@@ -4,18 +4,18 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class InputValidator {
-  multiWordsSpaceSeparatedValidator(event: any) {
-    const pattern = /^[a-z\s]*$/;   
+  multiWordsSpaceDashSeparatedValidator(event: any) {
+    const pattern = /^[a-z\s-]*$/;
     if (!pattern.test(event.target.value)) {
-      event.target.value = event.target.value.replace(/[^a-z\s]/g, "");
+      event.target.value = event.target.value.replace(/[^a-z\s-]/g, "");
     }
     event.target.value =  event.target.value.replace(/\s\s+/g, ' ');
   }
 
   multiWordsComaSeparatedValidator(event: any) {
-    const pattern = /^[a-z,\s]*$/;  
+    const pattern = /^[a-z,\s-()]*$/;
     if (!pattern.test(event.target.value)) {
-      event.target.value = event.target.value.replace(/[^a-z,\s]/g, "");
+      event.target.value = event.target.value.replace(/[^a-z,\s-()]/g, "");
     }
     event.target.value =  event.target.value.replace(/\s\s+/g, ' ');
     event.target.value =  event.target.value.replace(/\s,+/g, ',');
@@ -23,7 +23,7 @@ export class InputValidator {
   }
 
   singleWordValidator(event: any) {
-    const pattern = /^[a-z']*$/;   
+    const pattern = /^[a-z']*$/;
     if (!pattern.test(event.target.value)) {
       event.target.value = event.target.value.replace(/[^a-z']/g, "");
     }
