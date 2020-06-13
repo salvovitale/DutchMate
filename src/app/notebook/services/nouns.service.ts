@@ -13,6 +13,7 @@ interface NounData {
   plural: string;
   translations: string[];
   hetDe: string;
+  jeForm: string;
   kind: string;
   examples: string;
   firstAdded: string;
@@ -54,6 +55,7 @@ export class NounsService {
             nounDataInput.examples,
             nounDataInput.hetDe,
             nounDataInput.plural,
+            nounDataInput.jeForm,
             new Date(),
             new Date(),
             0
@@ -104,6 +106,7 @@ export class NounsService {
                 resData[key].examples,
                 resData[key].hetDe,
                 resData[key].plural,
+                resData[key].jeForm,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
                 +resData[key].knowledgeStrength,
@@ -150,6 +153,7 @@ export class NounsService {
             nounData.examples,
             nounData.hetDe,
             nounData.plural,
+            nounData.jeForm,
             new Date(nounData.firstAdded),
             new Date(nounData.lastUpdated),
             +nounData.knowledgeStrength
@@ -181,6 +185,7 @@ export class NounsService {
             nounInput.examples,
             nounInput.hetDe,
             nounInput.plural,
+            nounInput.jeForm,
             oldNoun.firstAdded,
             new Date(),
             oldNoun.knowledgeStrength

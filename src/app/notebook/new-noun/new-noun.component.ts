@@ -31,7 +31,8 @@ export class NewNounComponent implements OnInit {
       KindWord.Noun,
       this.form.value['examples'],
       this.form.value['het-de'],
-      this.form.value['plural']
+      this.form.value['plural'],
+      this.form.value['je-form']
     )
     this.modalCtrl.dismiss({ newNounInputData: newNounInputData }, 'confirm');
   }
