@@ -18,6 +18,7 @@ interface NounData {
   examples: string;
   firstAdded: string;
   lastUpdated: string;
+  lastTimePracticed: string;
   knowledgeStrength: number;
 }
 
@@ -56,6 +57,7 @@ export class NounsService {
             nounDataInput.hetDe,
             nounDataInput.plural,
             nounDataInput.jeForm,
+            new Date(),
             new Date(),
             new Date(),
             0
@@ -109,6 +111,7 @@ export class NounsService {
                 resData[key].jeForm,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
+                new Date(resData[key].lastTimePracticed),
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -156,6 +159,7 @@ export class NounsService {
             nounData.jeForm,
             new Date(nounData.firstAdded),
             new Date(nounData.lastUpdated),
+            new Date(nounData.lastTimePracticed),
             +nounData.knowledgeStrength
           )
         }
@@ -188,6 +192,7 @@ export class NounsService {
             nounInput.jeForm,
             oldNoun.firstAdded,
             new Date(),
+            oldNoun.lastTimePracticed,
             oldNoun.knowledgeStrength
           );
           return this.http.put(

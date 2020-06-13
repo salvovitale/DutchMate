@@ -13,8 +13,9 @@ interface ConjPropData {
   translations: string[];
   kind: KindWord;
   examples: string;
-  firstAdded: Date;
-  lastUpdated: Date;
+  firstAdded: string;
+  lastUpdated: string;
+  lastTimePracticed: string,
   knowledgeStrength: number;
 }
 
@@ -50,6 +51,7 @@ export class ConjPropsService {
             separatedTranslations,
             conjPropDataInput.kind,
             conjPropDataInput.examples,
+            new Date(),
             new Date(),
             new Date(),
             0
@@ -100,6 +102,7 @@ export class ConjPropsService {
                 resData[key].examples,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
+                new Date(resData[key].lastTimePracticed),
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -131,6 +134,7 @@ export class ConjPropsService {
             adjectiveData.examples,
             new Date(adjectiveData.firstAdded),
             new Date(adjectiveData.lastUpdated),
+            new Date(adjectiveData.lastTimePracticed),
             +adjectiveData.knowledgeStrength
           )
         }
@@ -173,6 +177,7 @@ export class ConjPropsService {
             conjPropInput.examples,
             oldConjProp.firstAdded,
             new Date(),
+            oldConjProp.lastTimePracticed,
             oldConjProp.knowledgeStrength
           );
           return this.http.put(

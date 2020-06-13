@@ -16,8 +16,9 @@ interface AdjectiveData {
   eForm: string,
   isAlsoAdverb: boolean,
   adverbTranslations: string[],
-  firstAdded: Date;
-  lastUpdated: Date;
+  firstAdded: string;
+  lastUpdated: string;
+  lastTimePracticed: string,
   knowledgeStrength: number;
 }
 
@@ -60,6 +61,7 @@ export class AdjectivesService {
             adjectiveDataInput.eForm,
             adjectiveDataInput.isAlsoAdverb,
             separatedAdverbTranslations,
+            new Date(),
             new Date(),
             new Date(),
             0
@@ -113,6 +115,7 @@ export class AdjectivesService {
                 resData[key].adverbTranslations,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
+                new Date(resData[key].lastTimePracticed),
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -147,6 +150,7 @@ export class AdjectivesService {
             adjectiveData.adverbTranslations,
             new Date(adjectiveData.firstAdded),
             new Date(adjectiveData.lastUpdated),
+            new Date(adjectiveData.lastTimePracticed),
             +adjectiveData.knowledgeStrength
           )
         }
@@ -196,6 +200,7 @@ export class AdjectivesService {
             separatedAdverbTranslations,
             oldAdj.firstAdded,
             new Date(),
+            oldAdj.lastTimePracticed,
             oldAdj.knowledgeStrength
           );
           return this.http.put(

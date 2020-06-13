@@ -19,8 +19,9 @@ interface VerbData {
     pastParticiple: string;
     auxVerb: string;
     isRegular: boolean;
-    firstAdded: Date;
-    lastUpdated: Date;
+    firstAdded: string;
+    lastUpdated: string;
+    lastTimePracticed: string,
     knowledgeStrength: number;
 }
 
@@ -62,6 +63,7 @@ export class VerbsService {
             verbDataInput.pastParticiple,
             verbDataInput.auxVerb,
             verbDataInput.isRegular,
+            new Date(),
             new Date(),
             new Date(),
             0
@@ -118,6 +120,7 @@ export class VerbsService {
                 resData[key].isRegular,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
+                new Date(resData[key].lastTimePracticed),
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -168,6 +171,7 @@ export class VerbsService {
             verbData.isRegular,
             new Date(verbData.firstAdded),
             new Date(verbData.lastUpdated),
+            new Date(verbData.lastTimePracticed),
             +verbData.knowledgeStrength
           )
         }
@@ -203,6 +207,7 @@ export class VerbsService {
             verbInput.isRegular,
             oldVerb.firstAdded,
             new Date(),
+            oldVerb.lastTimePracticed,
             oldVerb.knowledgeStrength
           );
           return this.http.put(
