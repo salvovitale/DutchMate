@@ -31,6 +31,7 @@ export class Noun extends Word {
     public examples: string,
     public hetDe: string,
     public plural: string,
+    public jeForm: string,
     public firstAdded: Date,
     public lastUpdated: Date,
     public knowledgeStrength: number

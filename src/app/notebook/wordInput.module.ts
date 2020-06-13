@@ -17,6 +17,7 @@ export class NounInput extends WordInput {
     public examples: string,
     public hetDe: string,
     public plural: string,
+    public jeForm: string,
   ) {
     super(word, translations, kind, examples);
   }
