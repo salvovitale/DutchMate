@@ -93,6 +93,12 @@ export class AdverbsService {
           const adverbs = [];
           for (const key in resData){
             if(resData.hasOwnProperty(key)){
+              let lastTimePracticed: Date;
+              if(resData[key].lastTimePracticed){
+                lastTimePracticed = new Date(resData[key].lastTimePracticed);
+              } else {
+                lastTimePracticed = new Date(resData[key].firstAdded);
+              }
               adverbs.push(new  Adverb(
                 key,
                 resData[key].userId,
@@ -102,7 +108,7 @@ export class AdverbsService {
                 resData[key].examples,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
-                new Date(resData[key].lastTimePracticed),
+                lastTimePracticed,
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -183,6 +189,32 @@ export class AdverbsService {
           return this.http.put(
             `${environment.databaseUrl}/adverbs/${id}.json?auth=${fetchedToken}`,
                 {...updatedAdverb, id: null}
+          )
+        }
+      )
+    )
+  }
+
+  updateKnowledgeStrength(id: string, value: number){
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getAdverb(id);
+        }
+      ),
+      switchMap(
+        adverb => {
+          return this.http.put(
+            `${environment.databaseUrl}/adverbs/${id}.json?auth=${fetchedToken}`,
+            {
+              ...adverb,
+              id: null,
+              knowledgeStrength: adverb.knowledgeStrength + value,
+              lastTimePracticed: new Date()
+            }
           )
         }
       )

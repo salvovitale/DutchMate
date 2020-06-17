@@ -243,4 +243,20 @@ export class WordsService {
       )
     )
   }
+
+  updateKnowledgeStrength(id: string, value: number, kind: KindWord){
+    switch (kind) {
+      case KindWord.Noun:
+        return this.nounsService.updateKnowledgeStrength(id, value);
+      case KindWord.Verb:
+        return this.verbsService.updateKnowledgeStrength(id, value);
+      case KindWord.Adjective:
+        return this.adjectivesService.updateKnowledgeStrength(id, value);
+      case KindWord.Adverb:
+        return this.adverbsService.updateKnowledgeStrength(id, value);
+      default:
+        return this.conjPropsService.updateKnowledgeStrength(id, value);
+    }
+  }
+
 }

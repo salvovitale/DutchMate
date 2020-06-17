@@ -103,6 +103,12 @@ export class AdjectivesService {
           const adjectives = [];
           for (const key in resData){
             if(resData.hasOwnProperty(key)){
+              let lastTimePracticed: Date;
+              if(resData[key].lastTimePracticed){
+                lastTimePracticed = new Date(resData[key].lastTimePracticed);
+              } else {
+                lastTimePracticed = new Date(resData[key].firstAdded);
+              }
               adjectives.push(new  Adjective(
                 key,
                 resData[key].userId,
@@ -115,7 +121,7 @@ export class AdjectivesService {
                 resData[key].adverbTranslations,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
-                new Date(resData[key].lastTimePracticed),
+                lastTimePracticed,
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -206,6 +212,32 @@ export class AdjectivesService {
           return this.http.put(
             `${environment.databaseUrl}/adjectives/${id}.json?auth=${fetchedToken}`,
                 {...updatedAdverb, id: null}
+          )
+        }
+      )
+    )
+  }
+
+  updateKnowledgeStrength(id: string, value: number){
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getAdjective(id);
+        }
+      ),
+      switchMap(
+        adjective => {
+          return this.http.put(
+            `${environment.databaseUrl}/adjectives/${id}.json?auth=${fetchedToken}`,
+            {
+              ...adjective,
+              id: null,
+              knowledgeStrength: adjective.knowledgeStrength + value,
+              lastTimePracticed: new Date()
+            }
           )
         }
       )

@@ -12,8 +12,8 @@ const routes: Routes = [
         loadChildren: () => import('../notebook/notebook.module').then(m => m.NotebookPageModule)
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'practice',
+        loadChildren: () => import('../practice/practice.module').then(m => m.PracticePageModule)
       }
     ]
   },

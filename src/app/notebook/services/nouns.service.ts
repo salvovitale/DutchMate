@@ -99,6 +99,12 @@ export class NounsService {
           const nouns = [];
           for (const key in resData){
             if(resData.hasOwnProperty(key)){
+              let lastTimePracticed: Date;
+              if(resData[key].lastTimePracticed){
+                lastTimePracticed = new Date(resData[key].lastTimePracticed);
+              } else {
+                lastTimePracticed = new Date(resData[key].firstAdded);
+              }
               nouns.push(new  Noun(
                 key,
                 resData[key].userId,
@@ -111,7 +117,7 @@ export class NounsService {
                 resData[key].jeForm,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
-                new Date(resData[key].lastTimePracticed),
+                lastTimePracticed,
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -198,6 +204,32 @@ export class NounsService {
           return this.http.put(
             `${environment.databaseUrl}/nouns/${id}.json?auth=${fetchedToken}`,
                 {...updatedNoun, id: null}
+          )
+        }
+      )
+    )
+  }
+
+  updateKnowledgeStrength(id: string, value: number){
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getNoun(id);
+        }
+      ),
+      switchMap(
+        noun => {
+          return this.http.put(
+            `${environment.databaseUrl}/nouns/${id}.json?auth=${fetchedToken}`,
+            {
+              ...noun,
+              id: null,
+              knowledgeStrength: noun.knowledgeStrength + value,
+              lastTimePracticed: new Date()
+            }
           )
         }
       )

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotebookPage } from './notebook.page';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { NotebookPageRoutingModule } from './notebook-routing.module';
 import { NewNounComponent } from './new-noun/new-noun.component';
@@ -16,7 +15,6 @@ import { NewConjPropComponent } from './new-conj-prop/new-conj-prop.component';
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
     NotebookPageRoutingModule,
   ],
   declarations: [NotebookPage, NewNounComponent, NewVerbComponent, NewAdjAdvComponent, NewConjPropComponent],

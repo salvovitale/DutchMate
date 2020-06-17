@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Tab2Page } from './tab2.page';
+import { PracticePage } from './practice.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: Tab2Page,
+    component: PracticePage,
+  },
+  {
+    path: 'flashcards',
+    loadChildren: () => import('./flashcards/flashcards.module').then( m => m.FlashcardsPageModule)
   }
 ];
 
