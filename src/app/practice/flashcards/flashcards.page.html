@@ -37,14 +37,14 @@
         </ion-col>
       </ion-row>
       <ion-row *ngIf="!isShowResults">
-        <ion-col class="ion-text-end">
-          <ion-button color="primary" fill="outline" class="ion-margin-top" (click)="onCheck()" [disabled]="!f.valid">
-            Check
-          </ion-button>
-        </ion-col>
         <ion-col class="ion-text-start">
           <ion-button color="danger" fill="outline" class="ion-margin-top" (click)="onSkip()">
             Skip
+          </ion-button>
+        </ion-col>
+        <ion-col class="ion-text-end">
+          <ion-button color="primary" fill="outline" class="ion-margin-top" (click)="onCheck()" [disabled]="!f.valid">
+            Check
           </ion-button>
         </ion-col>
       </ion-row>
