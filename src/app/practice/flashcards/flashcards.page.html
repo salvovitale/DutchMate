@@ -38,7 +38,7 @@
       </ion-row>
       <ion-row *ngIf="!isShowResults">
         <ion-col class="ion-text-end">
-          <ion-button color="primary" fill="outline" class="ion-margin-top" (click)="onCheck()">
+          <ion-button color="primary" fill="outline" class="ion-margin-top" (click)="onCheck()" [disabled]="!f.valid">
             Check
           </ion-button>
         </ion-col>
