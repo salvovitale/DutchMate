@@ -18,6 +18,7 @@ interface NounData {
   examples: string;
   firstAdded: string;
   lastUpdated: string;
+  lastTimePracticed: string;
   knowledgeStrength: number;
 }
 
@@ -56,6 +57,7 @@ export class NounsService {
             nounDataInput.hetDe,
             nounDataInput.plural,
             nounDataInput.jeForm,
+            new Date(),
             new Date(),
             new Date(),
             0
@@ -97,6 +99,12 @@ export class NounsService {
           const nouns = [];
           for (const key in resData){
             if(resData.hasOwnProperty(key)){
+              let lastTimePracticed: Date;
+              if(resData[key].lastTimePracticed){
+                lastTimePracticed = new Date(resData[key].lastTimePracticed);
+              } else {
+                lastTimePracticed = new Date(resData[key].firstAdded);
+              }
               nouns.push(new  Noun(
                 key,
                 resData[key].userId,
@@ -109,6 +117,7 @@ export class NounsService {
                 resData[key].jeForm,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
+                lastTimePracticed,
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -156,6 +165,7 @@ export class NounsService {
             nounData.jeForm,
             new Date(nounData.firstAdded),
             new Date(nounData.lastUpdated),
+            new Date(nounData.lastTimePracticed),
             +nounData.knowledgeStrength
           )
         }
@@ -188,11 +198,38 @@ export class NounsService {
             nounInput.jeForm,
             oldNoun.firstAdded,
             new Date(),
+            oldNoun.lastTimePracticed,
             oldNoun.knowledgeStrength
           );
           return this.http.put(
             `${environment.databaseUrl}/nouns/${id}.json?auth=${fetchedToken}`,
                 {...updatedNoun, id: null}
+          )
+        }
+      )
+    )
+  }
+
+  updateKnowledgeStrength(id: string, value: number){
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getNoun(id);
+        }
+      ),
+      switchMap(
+        noun => {
+          return this.http.put(
+            `${environment.databaseUrl}/nouns/${id}.json?auth=${fetchedToken}`,
+            {
+              ...noun,
+              id: null,
+              knowledgeStrength: noun.knowledgeStrength + value,
+              lastTimePracticed: new Date()
+            }
           )
         }
       )

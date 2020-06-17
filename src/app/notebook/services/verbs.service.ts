@@ -19,8 +19,9 @@ interface VerbData {
     pastParticiple: string;
     auxVerb: string;
     isRegular: boolean;
-    firstAdded: Date;
-    lastUpdated: Date;
+    firstAdded: string;
+    lastUpdated: string;
+    lastTimePracticed: string,
     knowledgeStrength: number;
 }
 
@@ -64,6 +65,7 @@ export class VerbsService {
             verbDataInput.isRegular,
             new Date(),
             new Date(),
+            new Date(),
             0
           )
           return this.http.post<{name: string}>(
@@ -103,6 +105,12 @@ export class VerbsService {
           const verbs = [];
           for (const key in resData){
             if(resData.hasOwnProperty(key)){
+              let lastTimePracticed: Date;
+              if(resData[key].lastTimePracticed){
+                lastTimePracticed = new Date(resData[key].lastTimePracticed);
+              } else {
+                lastTimePracticed = new Date(resData[key].firstAdded);
+              }
               verbs.push(new  Verb(
                 key,
                 resData[key].userId,
@@ -118,6 +126,7 @@ export class VerbsService {
                 resData[key].isRegular,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
+                lastTimePracticed,
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -168,6 +177,7 @@ export class VerbsService {
             verbData.isRegular,
             new Date(verbData.firstAdded),
             new Date(verbData.lastUpdated),
+            new Date(verbData.lastTimePracticed),
             +verbData.knowledgeStrength
           )
         }
@@ -203,6 +213,7 @@ export class VerbsService {
             verbInput.isRegular,
             oldVerb.firstAdded,
             new Date(),
+            oldVerb.lastTimePracticed,
             oldVerb.knowledgeStrength
           );
           return this.http.put(
@@ -214,4 +225,29 @@ export class VerbsService {
     )
   }
 
+  updateKnowledgeStrength(id: string, value: number){
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getVerb(id);
+        }
+      ),
+      switchMap(
+        verb => {
+          return this.http.put(
+            `${environment.databaseUrl}/verbs/${id}.json?auth=${fetchedToken}`,
+            {
+              ...verb,
+              id: null,
+              knowledgeStrength: verb.knowledgeStrength + value,
+              lastTimePracticed: new Date()
+            }
+          )
+        }
+      )
+    )
+  }
 }

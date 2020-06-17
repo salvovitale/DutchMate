@@ -17,6 +17,7 @@ export class Word {
     public examples: string,
     public firstAdded: Date,
     public lastUpdated: Date,
+    public lastTimePracticed: Date,
     public knowledgeStrength: number
   ) {}
 }
@@ -34,9 +35,10 @@ export class Noun extends Word {
     public jeForm: string,
     public firstAdded: Date,
     public lastUpdated: Date,
+    public lastTimePracticed: Date,
     public knowledgeStrength: number
   ) {
-    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, knowledgeStrength);
+    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, lastTimePracticed, knowledgeStrength);
   }
 }
 
@@ -56,9 +58,10 @@ export class Verb extends Word {
     public isRegular: boolean,
     public firstAdded: Date,
     public lastUpdated: Date,
+    public lastTimePracticed: Date,
     public knowledgeStrength: number
   ) {
-    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, knowledgeStrength);
+    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, lastTimePracticed, knowledgeStrength);
   }
 }
 
@@ -75,9 +78,10 @@ export class Adjective extends Word {
     public adverbTranslations: string[],
     public firstAdded: Date,
     public lastUpdated: Date,
+    public lastTimePracticed: Date,
     public knowledgeStrength: number
   ){
-    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, knowledgeStrength);
+    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, lastTimePracticed, knowledgeStrength);
   }
 }
 export class Adverb extends Word {
@@ -90,8 +94,9 @@ export class Adverb extends Word {
     public examples: string,
     public firstAdded: Date,
     public lastUpdated: Date,
+    public lastTimePracticed: Date,
     public knowledgeStrength: number
   ){
-    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, knowledgeStrength);
+    super(id, userId, word, translations, kind, examples, firstAdded, lastUpdated, lastTimePracticed, knowledgeStrength);
   }
 }

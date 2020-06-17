@@ -16,8 +16,9 @@ interface AdjectiveData {
   eForm: string,
   isAlsoAdverb: boolean,
   adverbTranslations: string[],
-  firstAdded: Date;
-  lastUpdated: Date;
+  firstAdded: string;
+  lastUpdated: string;
+  lastTimePracticed: string,
   knowledgeStrength: number;
 }
 
@@ -62,6 +63,7 @@ export class AdjectivesService {
             separatedAdverbTranslations,
             new Date(),
             new Date(),
+            new Date(),
             0
           )
           return this.http.post<{name: string}>(
@@ -101,6 +103,12 @@ export class AdjectivesService {
           const adjectives = [];
           for (const key in resData){
             if(resData.hasOwnProperty(key)){
+              let lastTimePracticed: Date;
+              if(resData[key].lastTimePracticed){
+                lastTimePracticed = new Date(resData[key].lastTimePracticed);
+              } else {
+                lastTimePracticed = new Date(resData[key].firstAdded);
+              }
               adjectives.push(new  Adjective(
                 key,
                 resData[key].userId,
@@ -113,6 +121,7 @@ export class AdjectivesService {
                 resData[key].adverbTranslations,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
+                lastTimePracticed,
                 +resData[key].knowledgeStrength,
               ));
             }
@@ -147,6 +156,7 @@ export class AdjectivesService {
             adjectiveData.adverbTranslations,
             new Date(adjectiveData.firstAdded),
             new Date(adjectiveData.lastUpdated),
+            new Date(adjectiveData.lastTimePracticed),
             +adjectiveData.knowledgeStrength
           )
         }
@@ -196,11 +206,38 @@ export class AdjectivesService {
             separatedAdverbTranslations,
             oldAdj.firstAdded,
             new Date(),
+            oldAdj.lastTimePracticed,
             oldAdj.knowledgeStrength
           );
           return this.http.put(
             `${environment.databaseUrl}/adjectives/${id}.json?auth=${fetchedToken}`,
                 {...updatedAdverb, id: null}
+          )
+        }
+      )
+    )
+  }
+
+  updateKnowledgeStrength(id: string, value: number){
+    let fetchedToken: string;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(
+        token => {
+          fetchedToken = token;
+          return this.getAdjective(id);
+        }
+      ),
+      switchMap(
+        adjective => {
+          return this.http.put(
+            `${environment.databaseUrl}/adjectives/${id}.json?auth=${fetchedToken}`,
+            {
+              ...adjective,
+              id: null,
+              knowledgeStrength: adjective.knowledgeStrength + value,
+              lastTimePracticed: new Date()
+            }
           )
         }
       )
