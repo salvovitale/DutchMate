@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { InputValidator } from 'src/app/shared/util/inputValidator';
 import { KindWord } from '../word.module';
 import { AdjectiveInput, AdverbInput } from '../wordInput.module';
@@ -17,8 +17,17 @@ export class NewAdjAdvComponent implements OnInit {
   isAdjAlsoAdv: 'yes' | 'no';
   constructor(
     private modalCtrl: ModalController,
-    public inputValidator: InputValidator
+    public inputValidator: InputValidator,
+    private alertCtrl: AlertController,
   ) { }
+
+  onInfoTranslations(){
+    this.alert('Info', 'Multiple translations must be separated with comas.')
+  }
+
+  onInfoEform(){
+    this.alert('Example', 'If the adjective is "gelukkig" the correct form for this input will be "gelukkige".');
+  }
 
   ngOnInit() {
     this.adjOrAdv = 'adj';
@@ -49,6 +58,21 @@ export class NewAdjAdvComponent implements OnInit {
       );
       this.modalCtrl.dismiss({ newAdverbInputData: newAdverbInputData }, 'adverb');
     }
+  }
+
+  alert(header: string, message: string){
+    this.alertCtrl.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'ok'
+        }
+    ]
+    }).then(alertEl =>{
+      alertEl.present();
+    });
   }
 
   onAdjAdvChange(event: any){

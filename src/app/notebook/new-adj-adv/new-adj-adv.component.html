@@ -17,7 +17,7 @@
           <ion-list>
             <ion-radio-group [value]="adjOrAdv" (ionChange)="onAdjAdvChange($event)">
               <ion-list-header>
-                <ion-label style="font-size:medium;">Adjective or Adverb ?</ion-label>
+                <ion-label style="font-size:medium;">Adjective or Adverb ? <span>*</span></ion-label>
               </ion-list-header>
               <ion-item>
                 <ion-label>Adjective</ion-label>
@@ -34,7 +34,7 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
-            <ion-label position="floating">New Word</ion-label>
+            <ion-label position="floating">New Word <span>*</span></ion-label>
             <ion-input
               type="text"
               ngModel
@@ -48,7 +48,7 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
-            <ion-label position="floating">Translations</ion-label>
+            <ion-label position="floating">Translations <span>*</span></ion-label>
             <ion-input
               type="text"
               ngModel
@@ -56,6 +56,9 @@
               (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
               required
             ></ion-input>
+            <ion-icon name="help-circle-outline" slot="end"
+            (click)="onInfoTranslations()"
+            ></ion-icon>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -70,6 +73,9 @@
                 name="e-form"
                 (input)="inputValidator.singleWordValidator($event)"
               ></ion-input>
+              <ion-icon name="help-circle-outline" slot="end"
+              (click)="onInfoEform()"
+              ></ion-icon>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -78,7 +84,7 @@
             <ion-list>
               <ion-radio-group [value]="isAdjAlsoAdv" (ionChange)="onIsAdjAlsoAdvChange($event)">
                 <ion-list-header>
-                  <ion-label style="font-size:medium;">Is this Adjective also used as an Adverb ?</ion-label>
+                  <ion-label style="font-size:medium;">Is this Adjective also used as an Adverb ? <span>*</span></ion-label>
                 </ion-list-header>
                 <ion-item>
                   <ion-label>Yes</ion-label>
@@ -95,7 +101,7 @@
         <ion-row *ngIf="isAdjAlsoAdv==='yes'">
           <ion-col size-sm="6" offset-sm="3">
             <ion-item>
-              <ion-label position="floating">Adverb Translations</ion-label>
+              <ion-label position="floating">Adverb Translations <span>*</span></ion-label>
               <ion-input
                 type="text"
                 ngModel
@@ -103,6 +109,9 @@
                 (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
                 required
               ></ion-input>
+              <ion-icon name="help-circle-outline" slot="end"
+              (click)="onInfoTranslations()"
+              ></ion-icon>
             </ion-item>
           </ion-col>
         </ion-row>

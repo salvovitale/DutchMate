@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { InputValidator } from 'src/app/shared/util/inputValidator';
 import { KindWord } from '../word.module';
 import { WordInput } from '../wordInput.module';
@@ -17,7 +17,8 @@ export class NewConjPropComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    public inputValidator: InputValidator
+    public inputValidator: InputValidator,
+    private alertCtrl: AlertController,
   ) { }
 
   ngOnInit() {
@@ -48,6 +49,25 @@ export class NewConjPropComponent implements OnInit {
       return;
     }
     this.conjOrProp= event.target.value;
+  }
+
+  onInfoTranslations(){
+    this.alert('Info', 'Multiple translations must be separated with comas.')
+  }
+
+  alert(header: string, message: string){
+    this.alertCtrl.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'ok'
+        }
+    ]
+    }).then(alertEl =>{
+      alertEl.present();
+    });
   }
 
   onCancel(){

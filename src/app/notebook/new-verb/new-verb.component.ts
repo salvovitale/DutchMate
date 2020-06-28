@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { VerbInput } from '../wordInput.module';
 import { KindWord } from '../word.module';
 import { InputValidator } from '../../shared/util/inputValidator';
@@ -16,7 +16,8 @@ export class NewVerbComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    public inputValidator: InputValidator
+    public inputValidator: InputValidator,
+    private alertCtrl: AlertController,
   ) { }
 
   ngOnInit() {}
@@ -38,6 +39,45 @@ export class NewVerbComponent implements OnInit {
       this.form.value['aux-verb'],
       this.form.value['is-regular'])
     }, 'confirm');
+  }
+
+  onInfoTranslations(){
+    this.alert('Info', 'Multiple translations must be separated with comas.')
+  }
+
+  onInfo1stPersonPresentSingular(){
+    this.alert('Example', 'If the verb is "gaan", the correct form for this input will be "ga". '
+                          +'If the verb is "aankomen", the correct form for this input will be "kom aan".');
+  }
+
+  onInfo1stPastPresentSingular(){
+    this.alert('Example', 'If the verb is "gaan" the correct form for this input will be "ging". '
+                          +'If the verb is "aankomen", the correct form for this input will be "kwam aan".');
+  }
+
+  onInfo1stPastPresentPlural(){
+    this.alert('Example', 'If the verb is "gaan" the correct form for this input will be "gingen". '
+                         +'If the verb is "aankomen", the correct form for this input will be "kwamen aan".');
+  }
+
+  onInfoPastParticiple(){
+    this.alert('Example', 'If the verb is "gaan" the correct form for this input will be "gegaan". '
+                         +'If the verb is "aankomen", the correct form for this input will be "aangekomen".');
+  }
+
+  alert(header: string, message: string){
+    this.alertCtrl.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'ok'
+        }
+    ]
+    }).then(alertEl =>{
+      alertEl.present();
+    });
   }
 
   onCancel(){
