@@ -40,4 +40,21 @@ export class KindOfWordUtil {
     }
   }
 
+  retrieveShortStringFromKind(wordType: KindWord) : string {
+    switch (wordType) {
+      case KindWord.Adjective:
+        return '[Adj]';
+      case KindWord.Adverb:
+        return '[Adv]';
+      case KindWord.Verb:
+        return '[Vb]';
+      case KindWord.Preposition:
+        return '[Prep]';
+      case KindWord.Conjunction:
+        return '[Conj]';
+      default:
+        return '[Noun]';
+    }
+  }
+
 }

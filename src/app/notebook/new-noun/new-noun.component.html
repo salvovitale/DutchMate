@@ -30,14 +30,15 @@
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-label position="floating">Translations <span>*</span></ion-label>
-            <ion-input
+            <ion-textarea
               type="text"
               [ngModel]="translations"
+              rows="5"
               name="translations"
               value={{translations}}
               (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
               required>
-            </ion-input>
+            </ion-textarea>
             <ion-icon name="help-circle-outline" slot="end"
               (click)="onInfoTranslations()"
             ></ion-icon>

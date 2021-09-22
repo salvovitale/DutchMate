@@ -51,7 +51,6 @@ export class VerbDetailPage implements OnInit {
         this.verb = verb;
         this.searchWordService.conjugateVerb(this.verb.word).subscribe((data : EntireConjugation) =>
         {
-          console.log(data)
           this.entireConj = data;
           this.isLoading = false;
         },

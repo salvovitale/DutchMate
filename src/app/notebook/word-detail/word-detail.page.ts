@@ -5,6 +5,7 @@ import { NavController, AlertController, LoadingController } from '@ionic/angula
 import { WordsService } from '../words.service';
 import { switchMap } from 'rxjs/operators';
 import { OtherWordsService } from '../services/other-words.service';
+import { KindOfWordUtil } from '../shared/kindOfWordUtil';
 
 @Component({
   selector: 'app-adverb-detail',
@@ -16,6 +17,7 @@ export class WordDetailPage implements OnInit {
   word: Word;
   wordId: string;
   isLoading =false;
+  kindOfWord: string;
 
   constructor(
     private router: Router,
@@ -24,7 +26,8 @@ export class WordDetailPage implements OnInit {
     private otherWordsService: OtherWordsService,
     private wordsService: WordsService,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private kindOfWordUtil: KindOfWordUtil
   ) { }
 
   ngOnInit() {
@@ -45,6 +48,7 @@ export class WordDetailPage implements OnInit {
     .subscribe(
       word =>{
         this.word = word;
+        this.kindOfWord = this.kindOfWordUtil.retrieveShortStringFromKind(word.kind)
         this.isLoading = false;
       }
     )

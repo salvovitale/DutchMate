@@ -13,9 +13,7 @@ export class VerbConjComponent implements OnInit {
   showMore = false;
   constructor( private modalCtrl: ModalController) { }
 
-  ngOnInit() {
-    console.log(this.entireConj);
-  }
+  ngOnInit() {}
 
   onCancel(){
     this.modalCtrl.dismiss(null, 'cancel');

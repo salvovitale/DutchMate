@@ -4,7 +4,7 @@
       <!-- if we refresh the stack is lost and the page does not know where to go back. We can fix that with the defaultHref -->
       <ion-back-button defaultHref="/tabs/notebook"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ verb?.word }}</ion-title>
+    <ion-title>{{ verb?.word }} [Vb]</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="onEditNoun(verbId)">
         <ion-icon name="create-outline" slot="icon-only"></ion-icon>
