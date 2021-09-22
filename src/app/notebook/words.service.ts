@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Noun, KindWord, Word, Verb } from './word.module';
+import { KindWord, Word } from './word.module';
 import { BehaviorSubject } from 'rxjs';
-import { take, tap, delay, map, switchMap } from 'rxjs/operators';
+import { take, tap, switchMap } from 'rxjs/operators';
 import { NounsService } from './services/nouns.service';
 import { Router } from '@angular/router';
-import { NounInput, VerbInput, AdjectiveInput, AdverbInput, WordInput } from './wordInput.module';
+import { NounInput, VerbInput, WordInput } from './wordInput.module';
 import { VerbsService } from './services/verbs.service';
-import { AdjectivesService } from './services/adjectives.service';
-import { AdverbsService } from './services/adverbs.service';
-import { ConjPropsService } from './services/conj-props.service';
+import { OtherWordsService } from './services/other-words.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +15,9 @@ export class WordsService {
   private _words = new BehaviorSubject<Word[]>([]);
 
   constructor(
-    private http: HttpClient,
     private nounsService: NounsService,
     private verbsService: VerbsService,
-    private adjectivesService: AdjectivesService,
-    private adverbsService: AdverbsService,
-    private conjPropsService: ConjPropsService,
+    private otherWordsService: OtherWordsService,
     private router: Router) { }
 
   get words(){
@@ -98,15 +92,15 @@ export class WordsService {
     )
   }
 
-  addAdjective(adjectiveDataInput: AdjectiveInput){
-    return this.adjectivesService.addAdjective(adjectiveDataInput).pipe(
+  addWord(wordInput: WordInput){
+    return this.otherWordsService.addOtherWord(wordInput).pipe(
       switchMap(
-        newAdjective => {
+        newWord => {
           return this.words.pipe(
             take(1),
             tap(
               words => {
-                this._words.next(words.concat(newAdjective));
+                this._words.next(words.concat(newWord));
                 // this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
               }
             )
@@ -116,76 +110,8 @@ export class WordsService {
     )
   }
 
-  deleteAdjective(id: string){
-    return this.adjectivesService.deleteAdjective(id).pipe(
-      switchMap(
-        () => {
-          return this.words;
-        }
-      ),
-      take(1),
-      tap(
-        words =>{
-          this._words.next(words.filter(word => word.id !== id));
-        }
-      )
-    )
-  }
-
-  addAdverb(adverbDataInput: AdverbInput){
-    return this.adverbsService.addAdverb(adverbDataInput).pipe(
-      switchMap(
-        newAdverb => {
-          return this.words.pipe(
-            take(1),
-            tap(
-              words => {
-                this._words.next(words.concat(newAdverb));
-                // this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
-              }
-            )
-          )
-        }
-      )
-    )
-  }
-
-  deleteAdverb(id: string){
-    return this.adverbsService.deleteAdverb(id).pipe(
-      switchMap(
-        () => {
-          return this.words;
-        }
-      ),
-      take(1),
-      tap(
-        words =>{
-          this._words.next(words.filter(word => word.id !== id));
-        }
-      )
-    )
-  }
-
-  addConjProp(conjPropInput: WordInput){
-    return this.conjPropsService.addConjProp(conjPropInput).pipe(
-      switchMap(
-        newConjProp => {
-          return this.words.pipe(
-            take(1),
-            tap(
-              words => {
-                this._words.next(words.concat(newConjProp));
-                // this.router.navigate(['/','tabs','notebook','nouns', newNoun.id]);
-              }
-            )
-          )
-        }
-      )
-    )
-  }
-
-  deleteConjProp(id: string){
-    return this.conjPropsService.deleteConjProp(id).pipe(
+  deleteWord(id: string){
+    return this.otherWordsService.deleteOtherWord(id).pipe(
       switchMap(
         () => {
           return this.words;
@@ -202,41 +128,24 @@ export class WordsService {
 
   fetchWords(){
     let fetchedNouns = []
-    let fetchedAdjectives = [];
-    let fetchedAdverbs = [];
-    let fetchedConjProps = []
+    let fetchedOtherWords = [];
     return this.nounsService.fetchNouns().pipe(
       switchMap(
         nouns => {
           fetchedNouns = nouns;
-          return this.adjectivesService.fetchAdjectives();
+          return this.otherWordsService.fetchOtherWords();
         }
       ),
       switchMap(
-        adjectives => {
-          fetchedAdjectives = adjectives;
-          return this.adverbsService.fetchAdverbs();
-        }
-      ),
-      switchMap(
-        adverbs => {
-          fetchedAdverbs = adverbs;
-          return this.conjPropsService.fetchConjProps();
-          // return this.verbsService.fetchVerbs();
-        }
-      ),
-      switchMap(
-        conjProps => {
-          fetchedConjProps = conjProps;
+        otherWords => {
+          fetchedOtherWords = otherWords;
           return this.verbsService.fetchVerbs();
         }
       ),
       tap(
         verbs =>{
           this._words.next(fetchedNouns
-            .concat(fetchedAdjectives)
-            .concat(fetchedAdverbs)
-            .concat(fetchedConjProps)
+            .concat(fetchedOtherWords)
             .concat(verbs)
             .sort((a,b) => (a.word > b.word) ? 1 : ((b.word > a.word) ? -1 : 0)));
         }
@@ -250,12 +159,8 @@ export class WordsService {
         return this.nounsService.updateKnowledgeStrength(id, value);
       case KindWord.Verb:
         return this.verbsService.updateKnowledgeStrength(id, value);
-      case KindWord.Adjective:
-        return this.adjectivesService.updateKnowledgeStrength(id, value);
-      case KindWord.Adverb:
-        return this.adverbsService.updateKnowledgeStrength(id, value);
       default:
-        return this.conjPropsService.updateKnowledgeStrength(id, value);
+        return this.otherWordsService.updateKnowledgeStrength(id, value);
     }
   }
 

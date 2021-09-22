@@ -24,20 +24,20 @@ const routes: Routes = [
     loadChildren: () => import('./edit-verb/edit-verb.module').then( m => m.EditVerbPageModule)
   },
   {
-    path: 'adjectives/:adjId',
-    loadChildren: () => import('./adjective-detail/adjective-detail.module').then( m => m.AdjectiveDetailPageModule)
-  },
-  {
-    path: 'adjectives/edit/:adjId',
-    loadChildren: () => import('./edit-adjective/edit-adjective.module').then( m => m.EditAdjectivePageModule)
-  },
-  {
-    path: 'words/:wordId/kind/:kindId',
+    path: 'words/:wordId',
     loadChildren: () => import('./word-detail/word-detail.module').then( m => m.WordDetailPageModule)
   },
   {
-    path: 'words/edit/:wordId/kind/:kindId',
+    path: 'words/edit/:wordId',
     loadChildren: () => import('./edit-word/edit-word.module').then( m => m.EditWordPageModule)
+  },
+  {
+    path: 'search-word',
+    loadChildren: () => import('./search-word/search-word.module').then( m => m.SearchWordPageModule)
+  },
+  {
+    path: 'manual-add-word',
+    loadChildren: () => import('./manual-add-word/manual-add-word.module').then( m => m.ManualAddWordPageModule)
   }
 ];
 

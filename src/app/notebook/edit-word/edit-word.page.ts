@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Word, KindWord } from '../word.module';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AdverbsService } from '../services/adverbs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, LoadingController, AlertController } from '@ionic/angular';
 import { InputValidator } from 'src/app/shared/util/inputValidator';
 import { Subscription } from 'rxjs';
 import { WordInput } from '../wordInput.module';
-import { ConjPropsService } from '../services/conj-props.service';
+import { OtherWordsService } from '../services/other-words.service';
 
 @Component({
   selector: 'app-edit-word',
@@ -20,7 +19,6 @@ export class EditWordPage implements OnInit, OnDestroy {
   form: FormGroup
   kind: KindWord
   wordId: string;
-  kindId: string
   isLoading = false;
   private myGetSub: Subscription;
   private myUpdateSub: Subscription;
@@ -28,8 +26,7 @@ export class EditWordPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private adverbsService: AdverbsService,
-    private conjPropsService: ConjPropsService,
+    private otherWordsService: OtherWordsService,
     private router: Router,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
@@ -38,12 +35,12 @@ export class EditWordPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
-      if(!paramMap.has('wordId') || !paramMap.has('kindId')){
+      if(!paramMap.has('wordId')){
         this.navCtrl.navigateBack('/tabs/notebook');
         return;
       }
       this.wordId = paramMap.get('wordId');
-      this.kindId = paramMap.get('kindId');
+
       this.isLoading = true;
 
       let getWordById = this.getGetWordObservable();
@@ -71,7 +68,7 @@ export class EditWordPage implements OnInit, OnDestroy {
           buttons: [{
             text: 'Ok',
             handler: () => {
-              this.router.navigate(['/','tabs','notebook',this.kindId, this.wordId]);
+              this.router.navigate(['/','tabs','notebook','words', this.wordId]);
             }
           }]
         }).then(alertEl =>{
@@ -110,31 +107,17 @@ export class EditWordPage implements OnInit, OnDestroy {
         {
           loadingEl.dismiss();
           this.form.reset();
-          this.router.navigate(['/','tabs','notebook', 'words', this.wordId, 'kind', this.kindId]);
+          this.router.navigate(['/','tabs','notebook', 'words', this.wordId]);
         }
       );
     })
   }
 
   private getGetWordObservable(){
-    switch (this.kindId) {
-      case 'adverbs':
-        return this.adverbsService.getAdverb(this.wordId);
-      case 'conj-props':
-        return this.conjPropsService.getConjProp(this.wordId);
-      default:
-        return null;
-    }
+    return this.otherWordsService.getOtherWord(this.wordId);
   }
 
   private getUpdateWordObservable(wordEdited: WordInput){
-    switch (this.kindId) {
-      case 'adverbs':
-        return this.adverbsService.updateAdverb(this.wordId, wordEdited);
-      case 'conj-props':
-        return this.conjPropsService.updateConjProp(this.wordId, wordEdited);
-      default:
-        return null;
-    }
+    return this.otherWordsService.updateOtherWord(this.wordId, wordEdited);
   }
 }

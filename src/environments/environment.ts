@@ -10,7 +10,8 @@ export const environment = {
   signInUrl: '',
   sendResetPasswordUrl: '',
   refreshTokenUrl:'',
-  authDataStoreKey: ''
+  authDataStoreKey: '',
+  dictionaryApiUrl: ''
 };
 
 /*

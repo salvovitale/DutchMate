@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Word } from '../word.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, LoadingController } from '@ionic/angular';
-import { AdverbsService } from '../services/adverbs.service';
 import { WordsService } from '../words.service';
 import { switchMap } from 'rxjs/operators';
-import { ConjPropsService } from '../services/conj-props.service';
+import { OtherWordsService } from '../services/other-words.service';
 
 @Component({
   selector: 'app-adverb-detail',
@@ -16,15 +15,13 @@ export class WordDetailPage implements OnInit {
 
   word: Word;
   wordId: string;
-  kindId: string;
   isLoading =false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private adverbsService: AdverbsService,
-    private conjPropsService: ConjPropsService,
+    private otherWordsService: OtherWordsService,
     private wordsService: WordsService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController
@@ -35,12 +32,11 @@ export class WordDetailPage implements OnInit {
     this.route.paramMap.pipe(
       switchMap(
         paramMap =>{
-          if(!paramMap.has('wordId') || !paramMap.has('kindId')){
+          if(!paramMap.has('wordId')){
             this.navCtrl.navigateBack('/tabs/notebook');
             return;
           }
           this.wordId = paramMap.get('wordId');
-          this.kindId = paramMap.get('kindId');
           this.isLoading = true;
           return this.getGetWordObservable();
         }
@@ -77,7 +73,7 @@ export class WordDetailPage implements OnInit {
   }
 
   onEditWord(){
-    this.router.navigate(['/','tabs','notebook','words','edit', this.wordId, 'kind', this.kindId]);
+    this.router.navigate(['/','tabs','notebook','words','edit', this.wordId]);
   }
 
   private delete(){
@@ -95,24 +91,11 @@ export class WordDetailPage implements OnInit {
   }
 
   private getGetWordObservable(){
-    switch (this.kindId) {
-      case 'adverbs':
-        return this.adverbsService.getAdverb(this.wordId);
-      case 'conj-props':
-        return this.conjPropsService.getConjProp(this.wordId);
-      default:
-        return null;
-    }
+    return this.otherWordsService.getOtherWord(this.wordId);
+
   }
 
   private getDeleteWordObservable(){
-    switch (this.kindId) {
-      case 'adverbs':
-        return this.wordsService.deleteAdverb(this.wordId);
-      case 'conj-props':
-        return this.wordsService.deleteConjProp(this.wordId);
-      default:
-        return null;
-    }
+    return this.wordsService.deleteWord(this.wordId)
   }
 }

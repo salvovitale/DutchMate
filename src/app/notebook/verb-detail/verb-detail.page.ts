@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Verb } from '../word.module';
+import { EntireConjugation, Verb } from '../word.module';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, AlertController, LoadingController } from '@ionic/angular';
+import { NavController, AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { VerbsService } from '../services/verbs.service';
 import { WordsService } from '../words.service';
 import { switchMap } from 'rxjs/operators';
+import { VerbConjComponent } from '../verb-conj/verb-conj.component';
+import { SearchWordService } from '../services/search-word.service';
 
 @Component({
   selector: 'app-verb-detail',
@@ -15,6 +17,7 @@ export class VerbDetailPage implements OnInit {
 
   verb: Verb;
   verbId: string;
+  entireConj: EntireConjugation;
   isLoading = false;
   showMore = false;
 
@@ -25,7 +28,9 @@ export class VerbDetailPage implements OnInit {
     private verbsService: VerbsService,
     private wordsService: WordsService,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private modalCtrl: ModalController,
+    private searchWordService: SearchWordService,
     ) { }
 
   ngOnInit() {
@@ -44,13 +49,19 @@ export class VerbDetailPage implements OnInit {
     .subscribe(
       verb =>{
         this.verb = verb;
-        this.isLoading = false;
+        this.searchWordService.conjugateVerb(this.verb.word).subscribe((data : EntireConjugation) =>
+        {
+          console.log(data)
+          this.entireConj = data;
+          this.isLoading = false;
+        },
+        errRes => {
+          console.log(errRes);
+          this.isLoading = false;
+        }
+        );
       }
     )
-  }
-
-  onShowMore(){
-    this.showMore = !this.showMore;
   }
 
   onDelete(verbId: string){
@@ -77,6 +88,13 @@ export class VerbDetailPage implements OnInit {
 
   onEditNoun(id: string){
     this.router.navigate(['/','tabs','notebook','verbs','edit', id]);
+  }
+
+  openConjugation(){
+    this.modalCtrl.create({component: VerbConjComponent, componentProps: {entireConj: this.entireConj}}).then(modalEl =>{
+      modalEl.present();
+      return modalEl.onDidDismiss();
+    })
   }
 
   private delete(verbId: string){

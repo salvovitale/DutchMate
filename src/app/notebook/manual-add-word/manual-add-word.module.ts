@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { VerbDetailPageRoutingModule } from './verb-detail-routing.module';
+import { ManualAddWordPageRoutingModule } from './manual-add-word-routing.module';
 
-import { VerbDetailPage } from './verb-detail.page';
+import { ManualAddWordPage } from './manual-add-word.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    VerbDetailPageRoutingModule
+    ManualAddWordPageRoutingModule
   ],
-  declarations: [VerbDetailPage]
+  declarations: [ManualAddWordPage]
 })
-export class VerbDetailPageModule {}
+export class ManualAddWordPageModule {}

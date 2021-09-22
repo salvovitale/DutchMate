@@ -1,39 +1,38 @@
 import { Injectable } from '@angular/core';
-import { VerbInput } from '../wordInput.module';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../auth/auth.service';
-import { Verb, KindWord } from '../word.module';
+import { WordInput } from '../wordInput.module';
+import { Word, KindWord } from '../word.module';
 import { take, switchMap, map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { of } from 'rxjs';
 
-interface VerbData {
-    word: string;
-    translations: string[];
-    kind: KindWord;
-    examples: string;
-    auxVerb: string;
-    isRegular: boolean;
-    firstAdded: string;
-    lastUpdated: string;
-    lastTimePracticed: string,
-    knowledgeStrength: number;
+interface WordData {
+  userId: string;
+  word: string;
+  translations: string[];
+  kind: KindWord;
+  examples: string;
+  firstAdded: string;
+  lastUpdated: string;
+  lastTimePracticed: string,
+  knowledgeStrength: number;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class VerbsService {
+export class OtherWordsService {
 
   constructor(
     private http: HttpClient,
     private authService: AuthService
   ) { }
 
-  addVerb(verbDataInput: VerbInput){
-    let separatedTranslation = verbDataInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
+  addOtherWord(wordDataInput: WordInput){
+    let separatedTranslations = wordDataInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
+    let newWord: Word;
     let fetchedToken : string;
-    let newVerb: Verb;
     return this.authService.token.pipe(
       take(1),
       switchMap(
@@ -45,35 +44,33 @@ export class VerbsService {
       take(1),
       switchMap(
         userId =>{
-          newVerb = new Verb(
+          newWord = new Word(
             Math.random().toString(),
-            verbDataInput.word,
-            separatedTranslation,
-            KindWord.Verb,
-            verbDataInput.examples,
-            verbDataInput.auxVerb,
-            verbDataInput.isRegular,
+            wordDataInput.word,
+            separatedTranslations,
+            wordDataInput.kind,
+            wordDataInput.examples,
             new Date(),
             new Date(),
             new Date(),
             0
           )
           return this.http.post<{name: string}>(
-            `${environment.databaseUrl}/${userId}/verbs.json?auth=${fetchedToken}`,
-            {...newVerb, id: null}
+            `${environment.databaseUrl}/${userId}/other-words.json?auth=${fetchedToken}`,
+            {...newWord, id: null}
           )
         }
       ),
       switchMap(
         resData =>{
-          newVerb.id = resData.name;
-          return of(newVerb);
+          newWord.id = resData.name;
+          return of(newWord);
         }
       )
     )
   }
 
-  fetchVerbs(){
+  fetchOtherWords(){
     let fetchedUserId: string;
     return this.authService.userId.pipe(
       take(1),
@@ -86,14 +83,14 @@ export class VerbsService {
       take(1),
       switchMap(
         token =>{
-          return this.http.get<{[key: string]:VerbData}>(
-            `${environment.databaseUrl}/${fetchedUserId}/verbs.json?auth=${token}`
+          return this.http.get<{[key: string]:WordData}>(
+            `${environment.databaseUrl}/${fetchedUserId}/other-words.json?auth=${token}`
           )
         }
       ),
       switchMap(
         resData =>{
-          const verbs = [];
+          const words = [];
           for (const key in resData){
             if(resData.hasOwnProperty(key)){
               let lastTimePracticed: Date;
@@ -102,14 +99,12 @@ export class VerbsService {
               } else {
                 lastTimePracticed = new Date(resData[key].firstAdded);
               }
-              verbs.push(new  Verb(
+              words.push(new  Word(
                 key,
                 resData[key].word,
                 resData[key].translations,
                 +resData[key].kind,
                 resData[key].examples,
-                resData[key].auxVerb,
-                resData[key].isRegular,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
                 lastTimePracticed,
@@ -117,13 +112,49 @@ export class VerbsService {
               ));
             }
           }
-          return of(verbs);
+          return of(words);
         }
       )
     )
   }
 
-  deleteVerb(id: string){
+  getOtherWord(id: string) {
+    let fetchedUserId: string;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap(
+        userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
+      take(1),
+      switchMap(
+        token => {
+          return this.http.get<WordData>(
+            `${environment.databaseUrl}/${fetchedUserId}/other-words/${id}.json?auth=${token}`
+          )
+        }
+      ),
+      map(
+        wordData =>{
+          return new Word(
+            id,
+            wordData.word,
+            wordData.translations,
+            +wordData.kind,
+            wordData.examples,
+            new Date(wordData.firstAdded),
+            new Date(wordData.lastUpdated),
+            new Date(wordData.lastTimePracticed),
+            +wordData.knowledgeStrength
+          )
+        }
+      )
+    )
+  }
+
+  deleteOtherWord(id: string){
     let fetchedUserId: string;
     return this.authService.userId.pipe(
       take(1),
@@ -137,53 +168,15 @@ export class VerbsService {
       switchMap(
         token => {
           return this.http.delete(
-            `${environment.databaseUrl}/${fetchedUserId}/verbs/${id}.json?auth=${token}`
+            `${environment.databaseUrl}/${fetchedUserId}/other-words/${id}.json?auth=${token}`
           );
         }
       )
     );
   }
 
-  getVerb(id: string) {
-    let fetchedUserId: string;
-    return this.authService.userId.pipe(
-      take(1),
-      switchMap(
-        userId => {
-          fetchedUserId = userId;
-          return this.authService.token;
-        }
-      ),
-      take(1),
-      switchMap(
-        token => {
-          return this.http.get<VerbData>(
-            `${environment.databaseUrl}/${fetchedUserId}/verbs/${id}.json?auth=${token}`,
-          )
-        }
-      ),
-      map(
-        verbData =>{
-          return new Verb(
-            id,
-            verbData.word,
-            verbData.translations,
-            +verbData.kind,
-            verbData.examples,
-            verbData.auxVerb,
-            verbData.isRegular,
-            new Date(verbData.firstAdded),
-            new Date(verbData.lastUpdated),
-            new Date(verbData.lastTimePracticed),
-            +verbData.knowledgeStrength
-          )
-        }
-      )
-    )
-  }
-
-  updateVerb(id: string, verbInput: VerbInput){
-    let separatedTranslation = verbInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
+  updateOtherWord(id: string, wordInput: WordInput){
+    let separatedTranslation = wordInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
     let fetchedToken: string;
     let fetchedUserId: string;
     return this.authService.userId.pipe(
@@ -198,27 +191,25 @@ export class VerbsService {
       switchMap(
         token => {
           fetchedToken = token;
-          return this.getVerb(id);
+          return this.getOtherWord(id);
         }
       ),
       switchMap(
-        oldVerb => {
-          let updatedVerb = new Verb(
+        oldWord => {
+          let updatedAdverb = new Word(
             id,
-            verbInput.word,
+            wordInput.word,
             separatedTranslation,
-            KindWord.Verb,
-            verbInput.examples,
-            verbInput.auxVerb,
-            verbInput.isRegular,
-            oldVerb.firstAdded,
+            wordInput.kind,
+            wordInput.examples,
+            oldWord.firstAdded,
             new Date(),
-            oldVerb.lastTimePracticed,
-            oldVerb.knowledgeStrength
+            oldWord.lastTimePracticed,
+            oldWord.knowledgeStrength
           );
           return this.http.put(
-            `${environment.databaseUrl}/${fetchedUserId}/verbs/${id}.json?auth=${fetchedToken}`,
-            {...updatedVerb, id: null}
+            `${environment.databaseUrl}/${fetchedUserId}/other-words/${id}.json?auth=${fetchedToken}`,
+                {...updatedAdverb, id: null}
           )
         }
       )
@@ -240,17 +231,17 @@ export class VerbsService {
       switchMap(
         token => {
           fetchedToken = token;
-          return this.getVerb(id);
+          return this.getOtherWord(id);
         }
       ),
       switchMap(
-        verb => {
+        word => {
           return this.http.put(
-            `${environment.databaseUrl}/${fetchedUserId}/verbs/${id}.json?auth=${fetchedToken}`,
+            `${environment.databaseUrl}/${fetchedUserId}/other-words/${id}.json?auth=${fetchedToken}`,
             {
-              ...verb,
+              ...word,
               id: null,
-              knowledgeStrength: verb.knowledgeStrength + value,
+              knowledgeStrength: word.knowledgeStrength + value,
               lastTimePracticed: new Date()
             }
           )

@@ -15,93 +15,38 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
-            <ion-label position="floating">Infinite Form <span>*</span></ion-label>
+            <ion-label position="floating"
+              >Infinite Form <span>*</span></ion-label
+            >
             <ion-input
               type="text"
-              ngModel
+              [ngModel]="word"
               name="new-verb"
-              (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
-              required></ion-input>
+              (input)="
+                inputValidator.multiWordsSpaceDashSeparatedValidator($event)
+              "
+              required
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
-            <ion-label position="floating">Translations <span>*</span>
+            <ion-label position="floating"
+              >Translations <span>*</span>
             </ion-label>
             <ion-input
               type="text"
-              ngModel
+              [ngModel]="translations"
               name="translations"
               (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
-              required></ion-input>
-              <ion-icon name="help-circle-outline" slot="end"
+              required
+            ></ion-input>
+            <ion-icon
+              name="help-circle-outline"
+              slot="end"
               (click)="onInfoTranslations()"
-              ></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">1<sup>st</sup> Pers. Present Sing. <span>*</span></ion-label>
-            <ion-input
-              type="text"
-              ngModel
-              name="first-person-present"
-              (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
-              required></ion-input>
-              <ion-icon name="help-circle-outline" slot="end"
-              (click)="onInfo1stPersonPresentSingular()"
-              ></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">1<sup>st</sup> Pers. Past Sing. <span>*</span></ion-label>
-            <ion-input
-              type="text"
-              ngModel
-              name="first-person-past-singular"
-              (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
-              required></ion-input>
-            <ion-icon name="help-circle-outline" slot="end"
-              (click)="onInfo1stPastPresentSingular()"
-            ></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">1<sup>st</sup> Pers. Past Plural <span>*</span></ion-label>
-            <ion-input
-              type="text"
-              ngModel
-              name="first-person-past-plural"
-              (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
-              required></ion-input>
-            <ion-icon name="help-circle-outline" slot="end"
-              (click)="onInfo1stPastPresentPlural()"
-            ></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">Past Participle <span>*</span></ion-label>
-            <ion-input
-              type="text"
-              ngModel
-              name="past-participle"
-              (input)="inputValidator.singleWordValidator($event)"
-              required></ion-input>
-            <ion-icon name="help-circle-outline" slot="end"
-              (click)="onInfoPastParticiple()"
             ></ion-icon>
           </ion-item>
         </ion-col>
@@ -109,7 +54,7 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-list>
-            <ion-radio-group [ngModel]="'hebben'" name="aux-verb">
+            <ion-radio-group [ngModel]="auxVerb" name="aux-verb">
               <ion-list-header>
                 <ion-label>Auxiliary Verb <span>*</span></ion-label>
               </ion-list-header>
@@ -154,12 +99,31 @@
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
-          <ion-button type="submit" color="primary"  expand="block" [disabled]="!f.valid">
+          <ion-button
+            type="submit"
+            color="primary"
+            expand="block"
+            [disabled]="!f.valid"
+          >
             Add Verb
           </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
   </form>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-button
+          color="primary"
+          fill="outline"
+          expand="block"
+          (click)="openConjugation()"
+          [disabled]="!entireConj"
+        >
+          Show Conjugation
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
-

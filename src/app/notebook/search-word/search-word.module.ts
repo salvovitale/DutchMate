@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { VerbDetailPageRoutingModule } from './verb-detail-routing.module';
+import { SearchWordPageRoutingModule } from './search-word-routing.module';
 
-import { VerbDetailPage } from './verb-detail.page';
+import { SearchWordPage } from './search-word.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    VerbDetailPageRoutingModule
+    SearchWordPageRoutingModule
   ],
-  declarations: [VerbDetailPage]
+  declarations: [SearchWordPage]
 })
-export class VerbDetailPageModule {}
+export class SearchWordPageModule {}

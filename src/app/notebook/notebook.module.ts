@@ -7,8 +7,10 @@ import { NotebookPage } from './notebook.page';
 import { NotebookPageRoutingModule } from './notebook-routing.module';
 import { NewNounComponent } from './new-noun/new-noun.component';
 import { NewVerbComponent } from './new-verb/new-verb.component';
-import { NewAdjAdvComponent } from './new-adj-adv/new-adj-adv.component';
-import { NewConjPropComponent } from './new-conj-prop/new-conj-prop.component';
+import { VerbConjComponent } from './verb-conj/verb-conj.component';
+import { PronounsComponent } from './verb-conj/pronouns/pronouns.component';
+import { ConjugationComponent } from './verb-conj/conjugation/conjugation.component';
+import { NewWordComponent } from './new-word/new-word.component';
 
 @NgModule({
   imports: [
@@ -17,7 +19,7 @@ import { NewConjPropComponent } from './new-conj-prop/new-conj-prop.component';
     FormsModule,
     NotebookPageRoutingModule,
   ],
-  declarations: [NotebookPage, NewNounComponent, NewVerbComponent, NewAdjAdvComponent, NewConjPropComponent],
-  entryComponents: [NewNounComponent, NewVerbComponent, NewAdjAdvComponent, NewConjPropComponent]
+  declarations: [NotebookPage, NewWordComponent, NewNounComponent, NewVerbComponent, VerbConjComponent, PronounsComponent, ConjugationComponent],
+  entryComponents: [NewWordComponent, NewNounComponent, NewVerbComponent, VerbConjComponent]
 })
 export class NotebookPageModule {}

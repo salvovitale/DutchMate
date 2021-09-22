@@ -1,13 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Word, KindWord, Noun } from './word.module';
 import { ActionSheetController, ModalController, LoadingController } from '@ionic/angular';
-import { NewNounComponent } from './new-noun/new-noun.component';
-import { NewVerbComponent } from './new-verb/new-verb.component';
 import { WordsService } from './words.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { NewAdjAdvComponent } from './new-adj-adv/new-adj-adv.component';
-import { NewConjPropComponent } from './new-conj-prop/new-conj-prop.component';
+import { computeTimeInterval } from './shared/computeTimeInterval';
 
 @Component({
   selector: 'app-notebook',
@@ -79,50 +76,43 @@ export class NotebookPage implements OnInit, OnDestroy {
         return ['nouns', id];
       case KindWord.Verb:
         return ['verbs', id];
-      case KindWord.Adjective:
-        return ['adjectives', id];
-      case KindWord.Adverb:
-        return ['words', id, 'kind', 'adverbs'];
       default:
-        return ['words', id, 'kind', 'conj-props'];
+        return ['words', id];
     }
   }
 
-  addHetDe(word: Word){
-    if (word.kind === KindWord.Noun){
-      let noun = word as Noun;
-      return ' (' + noun.hetDe +  ')';
+  addKindOfWord(word: Word){
+    switch (word.kind) {
+      case KindWord.Adjective:
+        return '[Adj]'
+      case KindWord.Adverb:
+        return '[Adv]'
+      case KindWord.Verb:
+        return '[Vb]'
+      case KindWord.Preposition:
+        return '[Prep]'
+      case KindWord.Conjunction:
+        return '[Conj]'
+      default:
+        return '[Noun ('+ ( word as Noun ).hetDe +')]';
     }
-    return '';
   }
 
 
   onNewWord(){
     this.actionSheetCtrl.create({
-      header: 'Add',
+      header: 'Add Word',
       buttons: [
         {
-          text: 'Noun',
+          text: 'Via Dictionary',
           handler: () => {
-            this.openNewNounModal();
+            this.router.navigate(['/','tabs','notebook','search-word']);
           }
         },
         {
-          text: 'Verb',
+          text: 'Manually',
           handler: () => {
-            this.openNewVerbModal();
-          }
-        },
-        {
-          text: 'Adjective/Adverb',
-          handler: () => {
-            this.openNewAdjAdvModal();
-          }
-        },
-        {
-          text: 'Preposition/Conjunction',
-          handler: () => {
-            this.openNewConjPropModal()
+            this.router.navigate(['/','tabs','notebook','manual-add-word']);
           }
         },
         {
@@ -133,142 +123,6 @@ export class NotebookPage implements OnInit, OnDestroy {
     })
     .then(actionSheetEl => {
       actionSheetEl.present();
-    });
-  }
-
-  openNewConjPropModal(){
-    this.modalCtrl.create(
-      {component: NewConjPropComponent,
-      componentProps: {}}).then(modalEl =>{
-      modalEl.present();
-      return modalEl.onDidDismiss();
-    })
-    .then( resultData => {
-      if(resultData.role === 'confirm'){
-        this.loadingCtrl
-        .create({
-          message: 'Adding a word...'
-        })
-        .then(loadingEl =>
-          {
-            loadingEl.present();
-            const data = resultData.data
-            this.wordsService.addConjProp(data.newConjPropInput)
-            .subscribe(
-            () => {
-              this.filterWords();
-              loadingEl.dismiss();
-            });
-          }
-        );
-      }
-
-    });
-  }
-
-  openNewAdjAdvModal(){
-    this.modalCtrl.create(
-      {component: NewAdjAdvComponent,
-      componentProps: {}}).then(modalEl =>{
-      modalEl.present();
-      return modalEl.onDidDismiss();
-    })
-    .then( resultData => {
-      if(resultData.role === 'adjective'){
-        this.loadingCtrl
-        .create({
-          message: 'Adding a adjective...'
-        })
-        .then(loadingEl =>
-          {
-            loadingEl.present();
-            const data = resultData.data
-            this.wordsService.addAdjective(data.newAdjectiveInputData)
-            .subscribe(
-            () => {
-              this.filterWords();
-              loadingEl.dismiss();
-            });
-          }
-        );
-      }
-      if(resultData.role === 'adverb'){
-        this.loadingCtrl
-        .create({
-          message: 'Adding a adverb...'
-        })
-        .then(loadingEl =>
-          {
-            loadingEl.present();
-            const data = resultData.data
-            this.wordsService.addAdverb(data.newAdverbInputData)
-            .subscribe(
-            () => {
-              this.filterWords();
-              loadingEl.dismiss();
-            });
-          }
-        );
-      }
-    });
-  }
-
-  openNewVerbModal(){
-    this.modalCtrl.create(
-      {component: NewVerbComponent,
-      componentProps: {}}).then(modalEl =>{
-      modalEl.present();
-      return modalEl.onDidDismiss();
-    })
-    .then( resultData => {
-      if(resultData.role === 'confirm'){
-        this.loadingCtrl
-        .create({
-          message: 'Adding a verb...'
-        })
-        .then(loadingEl =>
-          {
-            loadingEl.present();
-            const data = resultData.data
-            this.wordsService.addVerb(data.newVerbInputData)
-            .subscribe(
-            () => {
-              this.filterWords();
-              loadingEl.dismiss();
-            });
-          }
-        );
-      }
-
-    });
-  }
-
-  openNewNounModal(){
-    this.modalCtrl.create(
-      {component: NewNounComponent,
-      componentProps: {}}).then(modalEl =>{
-      modalEl.present();
-      return modalEl.onDidDismiss();
-    })
-    .then( resultData => {
-      if(resultData.role === 'confirm'){
-        this.loadingCtrl
-        .create({
-          message: 'Adding a noun...'
-        })
-        .then(loadingEl =>
-          {
-            loadingEl.present();
-            const data = resultData.data
-            this.wordsService.addNoun(data.newNounInputData)
-            .subscribe(
-            () => {
-              this.filterWords();
-              loadingEl.dismiss();
-            });
-          }
-        );
-      }
     });
   }
 
@@ -285,33 +139,7 @@ export class NotebookPage implements OnInit, OnDestroy {
       return;
     }
     this.timeSpan = event.target.value
-    const now = new Date().getTime();
-    switch (this.timeSpan) {
-      case '1h':
-        this.timeSpanForFilter = new Date(now - 60*60*1000);
-        break;
-      case '6h':
-        this.timeSpanForFilter = new Date(now - 60*60*6*1000);
-        break;
-      case '12h':
-        this.timeSpanForFilter = new Date(now - 60*60*12*1000);
-        break;
-      case '1d':
-        this.timeSpanForFilter = new Date(now - 60*60*24*1000);
-        break;
-      case '1w':
-        this.timeSpanForFilter = new Date(now - 60*60*24*7*1000);
-        break;
-      case '1M':
-        this.timeSpanForFilter = new Date(now - 60*60*24*30*1000);
-        break;
-      case '0a':
-        this.timeSpanForFilter = new Date(now - 20*12*60*60*24*30*1000);
-        break;
-      default:
-        this.timeSpanForFilter = new Date(now - 20*12*60*60*24*30*1000);
-        break;
-    }
+    this.timeSpanForFilter = computeTimeInterval(this.timeSpan)
     this.filterWords();
   }
 

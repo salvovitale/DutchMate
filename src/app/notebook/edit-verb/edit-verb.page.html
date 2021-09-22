@@ -44,54 +44,6 @@
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">First Person Present Singular</ion-label>
-            <ion-input
-              type="text"
-              formControlName="firstPersonPresent"
-              (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
-            ></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">First Person Past Singular</ion-label>
-            <ion-input
-              type="text"
-              formControlName="firstPersonPastSingular"
-              (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
-            ></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">First Person Past Plural</ion-label>
-            <ion-input
-              type="text"
-              formControlName="firstPersonPastPlural"
-              (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
-            ></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">Past Participle</ion-label>
-            <ion-input
-              type="text"
-              formControlName="pastParticiple"
-              (input)="inputValidator.singleWordValidator($event)"
-            ></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
           <ion-radio-group [value]="auxVerb" (ionChange)="onAuxVerbChange($event)">
           <ion-list>
               <ion-list-header>
@@ -114,7 +66,7 @@
           <ion-radio-group [value]="isRegular" (ionChange)="onIsRegularChange($event)">
           <ion-list>
               <ion-list-header>
-                <ion-label>Auxiliary Verb</ion-label>
+                <ion-label>Is Regular?</ion-label>
               </ion-list-header>
               <ion-item>
                 <ion-label>yes</ion-label>
