@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AlertController, IonItemSliding, LoadingController, ModalController } from '@ionic/angular';
 import { NewNounComponent } from '../new-noun/new-noun.component';
 import { NewVerbComponent } from '../new-verb/new-verb.component';
@@ -24,11 +25,20 @@ export class SearchWordPage implements OnInit {
     private wordsService: WordsService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private kindOfWordUtil: KindOfWordUtil
+    private kindOfWordUtil: KindOfWordUtil,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.isLoading = false;
+    this.route.queryParams.subscribe(params =>
+      {
+        if(Object.keys(params).length >  0){
+          this.wordToSearch = params.search
+          this.onSearch();
+        }
+      }
+    );
   }
 
   onSearch() {

@@ -20,6 +20,7 @@ export class NotebookPage implements OnInit, OnDestroy {
   searchValue='';
   kindFilter= '0a';
   isLoading = false;
+  showAddSearchedWord = false;
   segments = [{value: '0a', showValue: 'All'},
                 {value: '1n', showValue: 'N'},
                 {value: '2v', showValue: 'V'},
@@ -37,9 +38,7 @@ export class NotebookPage implements OnInit, OnDestroy {
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
-    private modalCtrl: ModalController,
     private wordsService: WordsService,
-    private loadingCtrl: LoadingController,
     private router: Router,
   ) {}
 
@@ -147,8 +146,17 @@ export class NotebookPage implements OnInit, OnDestroy {
     if(!event.target.value){
       this.searchValue='';
     }
-    this.searchValue = event.target.value;
+    let value: string = event.target.value;
+    this.searchValue = value.toLowerCase();
     this.filterWords();
+  }
+
+  onSearchInDictionary(event: any){
+    this.router.navigate(['/','tabs','notebook','search-word'], {queryParams:{ search : this.searchValue.trim()}});
+  }
+
+  onAddManually(event: any){
+    this.router.navigate(['/','tabs','notebook','manual-add-word']);
   }
 
   private filterWords() {
@@ -156,12 +164,17 @@ export class NotebookPage implements OnInit, OnDestroy {
       words => {
         this.loadedWords = words.filter(word =>
           (
-            (word.word.includes(this.searchValue) || word.translations.some(translation => translation.includes(this.searchValue)))
+            (word.word.toLowerCase().includes(this.searchValue) || word.translations.some(translation => translation.toLowerCase().includes(this.searchValue)))
               && word.lastUpdated > this.timeSpanForFilter
           )
         );
       }
     )
+    if (this.loadedWords.length === 0 && this.searchValue !== '') {
+      this.showAddSearchedWord = true;
+    } else {
+      this.showAddSearchedWord = false;
+    }
     this.filterOnSegment();
   }
 
