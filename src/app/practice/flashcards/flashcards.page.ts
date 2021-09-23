@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Word } from '../../notebook/word.module';
 import { Subscription } from 'rxjs';
 import { WordsService } from '../../notebook/words.service';
-import { InputValidator } from 'src/app/shared/util/inputValidator';
+import { InputValidator } from '../../shared/util/inputValidator';
 import { NgForm } from '@angular/forms';
+import { KindOfWordUtil } from '../../notebook/shared/kindOfWordUtil';
 
 @Component({
   selector: 'app-flashcards',
@@ -16,6 +17,7 @@ export class FlashcardsPage implements OnInit, OnDestroy {
   loadedWords : Word[];
   wordsToTrain : Word[];
   word: Word;
+  typeOfWord: string;
   noRepeatTime = 60*60*6*1000;
   knowledgeStrengthThreshold = 5;
   private wordsSub: Subscription;
@@ -25,7 +27,8 @@ export class FlashcardsPage implements OnInit, OnDestroy {
 
   constructor(
     private wordsService: WordsService,
-    public inputValidator: InputValidator
+    public inputValidator: InputValidator,
+    private kindOfWordUtil: KindOfWordUtil
   ) { }
 
   ngOnInit(): void {
@@ -83,6 +86,7 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     let randomIndex = Math.round(Math.random()*(this.wordsToTrain.length-1));
     this.isShowResults = false;
     this.word = this.wordsToTrain[randomIndex];
+    this.typeOfWord = this.kindOfWordUtil.retrieveShortStringFromKind(this.word.kind)
     this.isLoading= false;
   }
 

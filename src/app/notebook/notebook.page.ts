@@ -151,11 +151,11 @@ export class NotebookPage implements OnInit, OnDestroy {
     this.filterWords();
   }
 
-  onSearchInDictionary(event: any){
+  onSearchInDictionary(){
     this.router.navigate(['/','tabs','notebook','search-word'], {queryParams:{ search : this.searchValue.trim()}});
   }
 
-  onAddManually(event: any){
+  onAddManually(){
     this.router.navigate(['/','tabs','notebook','manual-add-word']);
   }
 
