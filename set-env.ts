@@ -14,8 +14,8 @@ const envConfigFile = `export const environment = {
   signInUrl: '${process.env.SIGNIN_URL}',
   sendResetPasswordUrl: '${process.env.RESET_PASSWORD_URL}',
   refreshTokenUrl:'${process.env.REFRESH_TOKEN_URL}',
-  authDataStoreKey: '${process.env.AUTH_DATA_STORE_KEY}'
-
+  authDataStoreKey: '${process.env.AUTH_DATA_STORE_KEY}',
+  dictionaryApiUrl: '${process.env.DICTIONARY_API_URL}'
 };
 `;
 console.log(colors.magenta('The file `environment.ts` will be written with the following content: \n'));

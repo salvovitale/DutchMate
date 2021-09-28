@@ -4,7 +4,7 @@
       <!-- if we refresh the stack is lost and the page does not know where to go back. We can fix that with the defaultHref -->
       <ion-back-button defaultHref="/tabs/notebook"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ verb?.word }}</ion-title>
+    <ion-title>{{ verb?.word }} [Vb]</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="onEditNoun(verbId)">
         <ion-icon name="create-outline" slot="icon-only"></ion-icon>
@@ -31,151 +31,14 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-padding">
-        <h4>Conjugation</h4>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-xs="7" size-sm="6" class="ion-text-end ion-padding">
-        <app-general-forms></app-general-forms>
-      </ion-col>
-      <ion-col size-xs="5" size-sm="6" class="ion-text-start ion-padding">
-        <app-general-forms-conj [verb]="verb"></app-general-forms-conj>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-padding">
-        <h5>Aantonende wijs</h5>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-        <h6>onvoltooid tegenwoordige tijd (ott)</h6>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-        <app-personal-pronouns></app-personal-pronouns>
-      </ion-col>
-      <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-        <app-present-conj [verb]="verb"></app-present-conj>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-        <h6>voltooid tegenwoordige tijd (vtt)</h6>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-        <app-personal-pronouns></app-personal-pronouns>
-      </ion-col>
-      <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-        <app-present-perfect-conj [verb]="verb"></app-present-perfect-conj>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-        <h6>onvoltooid verleden tijd (ovt)</h6>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-        <app-personal-pronouns></app-personal-pronouns>
-      </ion-col>
-      <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-        <app-simple-past-conj [verb]="verb"></app-simple-past-conj>
-      </ion-col>
-    </ion-row>
-    <div *ngIf="showMore">
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>voltooid verleden tijd (vvt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-          <app-personal-pronouns></app-personal-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-          <app-past-perfect-conj [verb]="verb"></app-past-perfect-conj>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>onvoltooid tegenwoordige toekomende tijd (ottt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-          <app-personal-pronouns></app-personal-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-          <app-simple-future-conj [verb]="verb"></app-simple-future-conj>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>voltooid tegenwoordige toekomende tijd (vttt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-          <app-personal-pronouns></app-personal-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-          <app-future-perfect-conj [verb]="verb"></app-future-perfect-conj>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-padding">
-          <h5>Voorwaardelijke wijs</h5>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>onvoltooid verleden toekomende tijd (ovtt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-          <app-personal-pronouns></app-personal-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-          <app-conditional-present-conj [verb]="verb"></app-conditional-present-conj>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>voltooid verleden toekomende tijd (vvtt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-          <app-personal-pronouns></app-personal-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-          <app-conditional-past-conj [verb]="verb"></app-conditional-past-conj>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-padding">
-          <h5>Gebiedende wijs</h5>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-md="6" class="ion-text-end ion-padding">
-          <app-imperative-pronouns></app-imperative-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-md="6" class="ion-text-start ion-padding">
-          <app-imperative-conj [verb]="verb"></app-imperative-conj>
-        </ion-col>
-      </ion-row>
-    </div>
-    <ion-row>
       <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
-        <ion-button class="ion-margin" fill="outline" (click)="onShowMore()">
-          {{ !showMore ? 'Show More' : 'Show Less' }}
+        <ion-button
+          color="primary"
+          fill="outline"
+          (click)="openConjugation()"
+          [disabled]="!entireConj"
+        >
+          Show Conjugation
         </ion-button>
       </ion-col>
     </ion-row>

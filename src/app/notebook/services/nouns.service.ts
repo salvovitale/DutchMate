@@ -8,12 +8,9 @@ import { AuthService } from '../../auth/auth.service';
 import { NounInput } from '../wordInput.module';
 
 interface NounData {
-  userId: string;
   word: string;
-  plural: string;
   translations: string[];
   hetDe: string;
-  jeForm: string;
   kind: string;
   examples: string;
   firstAdded: string;
@@ -49,21 +46,18 @@ export class NounsService {
         userId =>{
           newNoun = new Noun(
             Math.random().toString(),
-            userId,
             nounDataInput.word,
             separatedTranslation,
             KindWord.Noun,
             nounDataInput.examples,
             nounDataInput.hetDe,
-            nounDataInput.plural,
-            nounDataInput.jeForm,
             new Date(),
             new Date(),
             new Date(),
             0
           )
           return this.http.post<{name: string}>(
-            `${environment.databaseUrl}/nouns.json?auth=${fetchedToken}`,
+            `${environment.databaseUrl}/${userId}/nouns.json?auth=${fetchedToken}`,
             {...newNoun, id: null}
           )
         }
@@ -87,10 +81,11 @@ export class NounsService {
           return this.authService.token;
         }
       ),
+      take(1),
       switchMap(
         token =>{
           return this.http.get<{[key: string]:NounData}>(
-            `${environment.databaseUrl}/nouns.json?orderBy="userId"&equalTo="${fetchedUserId}"&auth=${token}`
+            `${environment.databaseUrl}/${fetchedUserId}/nouns.json?auth=${token}`
           )
         }
       ),
@@ -107,14 +102,11 @@ export class NounsService {
               }
               nouns.push(new  Noun(
                 key,
-                resData[key].userId,
                 resData[key].word,
                 resData[key].translations,
                 +resData[key].kind,
                 resData[key].examples,
                 resData[key].hetDe,
-                resData[key].plural,
-                resData[key].jeForm,
                 new Date(resData[key].firstAdded),
                 new Date(resData[key].lastUpdated),
                 lastTimePracticed,
@@ -129,12 +121,20 @@ export class NounsService {
   }
 
   deleteNoun(id: string){
-    return this.authService.token.pipe(
+    let fetchedUserId: string;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap(
+        userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
       take(1),
       switchMap(
         token => {
           return this.http.delete(
-            `${environment.databaseUrl}/nouns/${id}.json?auth=${token}`
+            `${environment.databaseUrl}/${fetchedUserId}/nouns/${id}.json?auth=${token}`
           );
         }
       )
@@ -142,12 +142,20 @@ export class NounsService {
   }
 
   getNoun(id: string) {
-    return this.authService.token.pipe(
+    let fetchedUserId: string;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap(
+        userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
       take(1),
       switchMap(
         token => {
           return this.http.get<NounData>(
-            `${environment.databaseUrl}/nouns/${id}.json?auth=${token}`
+            `${environment.databaseUrl}/${fetchedUserId}/nouns/${id}.json?auth=${token}`
           )
         }
       ),
@@ -155,14 +163,11 @@ export class NounsService {
         nounData =>{
           return new Noun(
             id,
-            nounData.userId,
             nounData.word,
             nounData.translations,
             +nounData.kind,
             nounData.examples,
             nounData.hetDe,
-            nounData.plural,
-            nounData.jeForm,
             new Date(nounData.firstAdded),
             new Date(nounData.lastUpdated),
             new Date(nounData.lastTimePracticed),
@@ -176,7 +181,15 @@ export class NounsService {
   updateNoun(id: string, nounInput: NounInput){
     let separatedTranslation = nounInput.translations.split(',').map(s => s.trim()).filter(el => el !== '');
     let fetchedToken: string;
-    return this.authService.token.pipe(
+    let fetchedUserId: string;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap(
+        userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
       take(1),
       switchMap(
         token => {
@@ -188,21 +201,18 @@ export class NounsService {
         oldNoun => {
           let updatedNoun = new Noun(
             id,
-            oldNoun.userId,
             nounInput.word,
             separatedTranslation,
             KindWord.Noun,
             nounInput.examples,
             nounInput.hetDe,
-            nounInput.plural,
-            nounInput.jeForm,
             oldNoun.firstAdded,
             new Date(),
             oldNoun.lastTimePracticed,
             oldNoun.knowledgeStrength
           );
           return this.http.put(
-            `${environment.databaseUrl}/nouns/${id}.json?auth=${fetchedToken}`,
+            `${environment.databaseUrl}/${fetchedUserId}/nouns/${id}.json?auth=${fetchedToken}`,
                 {...updatedNoun, id: null}
           )
         }
@@ -212,7 +222,15 @@ export class NounsService {
 
   updateKnowledgeStrength(id: string, value: number){
     let fetchedToken: string;
-    return this.authService.token.pipe(
+    let fetchedUserId: string;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap(
+        userId => {
+          fetchedUserId = userId;
+          return this.authService.token;
+        }
+      ),
       take(1),
       switchMap(
         token => {
@@ -223,7 +241,7 @@ export class NounsService {
       switchMap(
         noun => {
           return this.http.put(
-            `${environment.databaseUrl}/nouns/${id}.json?auth=${fetchedToken}`,
+            `${environment.databaseUrl}/${fetchedUserId}/nouns/${id}.json?auth=${fetchedToken}`,
             {
               ...noun,
               id: null,

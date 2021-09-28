@@ -56,22 +56,6 @@ export class EditVerbPage implements OnInit {
             updateOn: 'blur',
             validators: [Validators.required]
           }),
-          firstPersonPresent: new FormControl(this.verb.firstPersonPresent, {
-            updateOn: 'blur',
-            validators: [Validators.required]
-          }),
-          firstPersonPastSingular: new FormControl(this.verb.firstPersonPastSingular, {
-            updateOn: 'blur',
-            validators: [Validators.required]
-          }),
-          firstPersonPastPlural: new FormControl(this.verb.firstPersonPastPlural, {
-            updateOn: 'blur',
-            validators: [Validators.required]
-          }),
-          pastParticiple: new FormControl(this.verb.pastParticiple, {
-            updateOn: 'blur',
-            validators: [Validators.required]
-          }),
           examples: new FormControl(this.verb.examples, {
             updateOn: 'blur',
           })
@@ -93,7 +77,7 @@ export class EditVerbPage implements OnInit {
       });
     });
   }
-  
+
   onAuxVerbChange(event){
     if(!event.target.value){
       return;
@@ -117,10 +101,6 @@ export class EditVerbPage implements OnInit {
       this.form.value.translations,
       KindWord.Verb,
       this.form.value.examples,
-      this.form.value.firstPersonPresent,
-      this.form.value.firstPersonPastSingular,
-      this.form.value.firstPersonPastPlural,
-      this.form.value.pastParticiple,
       this.auxVerb,
       this.isRegular
     );

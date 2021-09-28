@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- if we refresh the stack is lost and the page does not know where to go back. We can fix that with the defaultHref -->
+      <ion-back-button defaultHref="/tabs/notebook"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add new word manually</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center" size-sm="6" offset-sm="3">
+        <ion-button
+          color="primary"
+          style="width:200px;"
+          (click)="addWord('Noun')"
+        >
+          Noun
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size-sm="6" offset-sm="3">
+        <ion-button
+          color="primary"
+          style="width:200px;"
+          (click)="addWord('Verb')"
+        >
+          Verb
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size-sm="6" offset-sm="3">
+        <ion-button
+          color="primary"
+          style="width:200px;"
+          (click)="addWord('Adjective')"
+        >
+          Adjective
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size-sm="6" offset-sm="3">
+        <ion-button
+          color="primary"
+          style="width:200px;"
+          (click)="addWord('Adverb')"
+        >
+          Adverb
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size-sm="6" offset-sm="3">
+        <ion-button
+          color="primary"
+          style="width:200px;"
+          (click)="addWord('Preposition')"
+        >
+          Preposition
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size-sm="6" offset-sm="3">
+        <ion-button
+          color="primary"
+          style="width:200px;"
+          (click)="addWord('Conjunction')"
+        >
+          Conjunction
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

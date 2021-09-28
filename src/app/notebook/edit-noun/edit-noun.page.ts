@@ -55,12 +55,6 @@ export class EditNounPage implements OnInit , OnDestroy {
             updateOn: 'blur',
             validators: [Validators.required]
           }),
-          plural: new FormControl(this.noun.plural, {
-            updateOn: 'blur',
-          }),
-          jeForm: new FormControl(this.noun.jeForm, {
-            updateOn: 'blur',
-          }),
           examples: new FormControl(this.noun.examples, {
             updateOn: 'blur',
           })
@@ -103,8 +97,6 @@ export class EditNounPage implements OnInit , OnDestroy {
         KindWord.Noun,
         this.form.value.examples,
         this.hetDe,
-        this.form.value.plural,
-        this.form.value.jeForm
       );
       this.nounsService.updateNoun(this.nounId, nounEdited).subscribe(
         () =>

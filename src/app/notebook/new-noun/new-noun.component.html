@@ -18,7 +18,7 @@
             <ion-label position="floating">New Word <span>*</span></ion-label>
             <ion-input
               type="text"
-              ngModel
+              [ngModel]="word"
               name="new-word"
               (input)="inputValidator.multiWordsSpaceDashSeparatedValidator($event)"
               required
@@ -30,13 +30,15 @@
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-label position="floating">Translations <span>*</span></ion-label>
-            <ion-input
+            <ion-textarea
               type="text"
-              ngModel
+              [ngModel]="translations"
+              rows="5"
               name="translations"
+              value={{translations}}
               (input)="inputValidator.multiWordsComaSeparatedValidator($event)"
               required>
-            </ion-input>
+            </ion-textarea>
             <ion-icon name="help-circle-outline" slot="end"
               (click)="onInfoTranslations()"
             ></ion-icon>
@@ -46,7 +48,7 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-list>
-            <ion-radio-group [ngModel]="'de'" name="het-de">
+            <ion-radio-group [ngModel]="article" name="het-de">
               <ion-list-header>
                 <ion-label style="font-size:medium;">de/het <span>*</span></ion-label>
               </ion-list-header>
@@ -60,35 +62,6 @@
               </ion-item>
             </ion-radio-group>
           </ion-list>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">Plural Form</ion-label>
-            <ion-input
-              type="text"
-              ngModel
-              name="plural"
-              (input)="inputValidator.singleWordValidator($event)"
-            ></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">Diminutive (-je)</ion-label>
-            <ion-input
-              type="text"
-              ngModel
-              name="je-form"
-              (input)="inputValidator.singleWordValidator($event)"
-            ></ion-input>
-            <ion-icon name="help-circle-outline" slot="end"
-            (click)="onDiminutiveForm()"
-          ></ion-icon>
-          </ion-item>
         </ion-col>
       </ion-row>
       <ion-row>
