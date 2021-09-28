@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EntireConjugation, Verb } from '../word.module';
+import { EntireConj, Verb } from '../word.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { VerbsService } from '../services/verbs.service';
@@ -17,7 +17,7 @@ export class VerbDetailPage implements OnInit {
 
   verb: Verb;
   verbId: string;
-  entireConj: EntireConjugation;
+  entireConj: EntireConj;
   isLoading = false;
   showMore = false;
 
@@ -49,7 +49,7 @@ export class VerbDetailPage implements OnInit {
     .subscribe(
       verb =>{
         this.verb = verb;
-        this.searchWordService.conjugateVerb(this.verb.word).subscribe((data : EntireConjugation) =>
+        this.searchWordService.conjugateVerb(this.verb.word).subscribe((data : EntireConj) =>
         {
           this.entireConj = data;
           this.isLoading = false;

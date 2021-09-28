@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ConjPerTime } from '../../word.module';
+import { ConjTense } from '../../word.module';
 
 @Component({
   selector: 'app-conjugation',
@@ -8,7 +8,7 @@ import { ConjPerTime } from '../../word.module';
 })
 export class ConjugationComponent implements OnInit {
 
-  @Input() conjPerTime: ConjPerTime;
+  @Input() conjTense: ConjTense;
   constructor() { }
 
   ngOnInit() {}

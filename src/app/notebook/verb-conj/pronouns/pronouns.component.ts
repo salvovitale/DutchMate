@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ConjPerTime } from '../../word.module';
+import { ConjTense } from '../../word.module';
 
 @Component({
   selector: 'app-pronouns',
@@ -8,9 +8,21 @@ import { ConjPerTime } from '../../word.module';
 })
 export class PronounsComponent implements OnInit {
 
-  @Input() conjPerTime: ConjPerTime;
+  @Input() pronouns: string[];
+  @Input() conjTense: ConjTense;
+  pronounsToShow: string[];
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pronounsToShow = [];
+    if(this.conjTense.conj.length === 6){
+      this.pronounsToShow = [...this.pronouns];
+    } else if (this.conjTense.conj.length === 2){
+      this.pronounsToShow.push(this.pronouns[1]);
+      this.pronounsToShow.push(this.pronouns[4]);
+    } else {
+      this.pronounsToShow.push('');
+    }
+  }
 
 }

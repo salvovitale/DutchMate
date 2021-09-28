@@ -1,6 +1,3 @@
-<p>{{ conjPerTime.first_singular.pronoun }}</p>
-<p>{{ conjPerTime.second_singular.pronoun }}</p>
-<p>{{ conjPerTime.third_singular.pronoun }}</p>
-<p>{{ conjPerTime.first_plural.pronoun }}</p>
-<p>{{ conjPerTime.second_plural.pronoun }}</p>
-<p>{{ conjPerTime.third_plural.pronoun }}</p>
+<div *ngFor="let pronoun of pronounsToShow">
+  <p>{{ pronoun }}</p>
+</div>

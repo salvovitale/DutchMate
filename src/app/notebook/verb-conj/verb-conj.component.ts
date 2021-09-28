@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { EntireConjugation } from '../word.module';
+import { EntireConj } from '../word.module';
 
 @Component({
   selector: 'app-verb-conj',
@@ -9,17 +9,12 @@ import { EntireConjugation } from '../word.module';
 })
 export class VerbConjComponent implements OnInit {
 
-  @Input() entireConj: EntireConjugation;
-  showMore = false;
+  @Input() entireConj: EntireConj;
   constructor( private modalCtrl: ModalController) { }
 
   ngOnInit() {}
 
   onCancel(){
     this.modalCtrl.dismiss(null, 'cancel');
-  }
-
-  onShowMore(){
-    this.showMore = !this.showMore;
   }
 }

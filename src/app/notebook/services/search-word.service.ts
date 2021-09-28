@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
-import { EntireConjugation, NounWithArticle} from "../word.module";
+import { EntireConj, NounWithArticle} from "../word.module";
 
 interface SearchedWordData {
   word: string,
@@ -18,12 +18,12 @@ export class SearchWordService {
 
   searchWord(word: string): any {
     return this.http.get<SearchedWordData[]>(
-      `${environment.dictionaryApiUrl}/translate/${word}`
+      `${environment.dictionaryApiUrl}/nl-to-en/translate/${word}`
     )
   }
 
   conjugateVerb(verb: string): any {
-    return this.http.get<EntireConjugation>(
+    return this.http.get<EntireConj>(
       `${environment.dictionaryApiUrl}/conjugate/${verb}`
     )
   }

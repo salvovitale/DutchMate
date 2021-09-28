@@ -11,128 +11,27 @@
 
 <ion-content class="ion-no-padding">
   <ion-grid class="ion-no-padding">
+  <div *ngFor="let group of entireConj.entire_conj" >
     <ion-row>
       <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-padding">
-        <h5>Aantonende wijs</h5>
+        <h5>{{group.group_name}}</h5>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-        <h6>onvoltooid tegenwoordige tijd (ott)</h6>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-        <app-pronouns [conjPerTime]="entireConj.present"></app-pronouns>
-      </ion-col>
-      <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-        <app-conjugation [conjPerTime]="entireConj.present"></app-conjugation>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-        <h6>voltooid tegenwoordige tijd (vtt)</h6>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-        <app-pronouns [conjPerTime]="entireConj.present_perfect"></app-pronouns>
-      </ion-col>
-      <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-        <app-conjugation [conjPerTime]="entireConj.present_perfect"></app-conjugation>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-        <h6>onvoltooid verleden tijd (ovt)</h6>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-        <app-pronouns [conjPerTime]="entireConj.simple_past"></app-pronouns>
-      </ion-col>
-      <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-        <app-conjugation [conjPerTime]="entireConj.simple_past"></app-conjugation>
-      </ion-col>
-    </ion-row>
-    <div *ngIf="showMore">
+    <div *ngFor="let conjTense of group.group_conj">
       <ion-row>
         <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>voltooid verleden tijd (vvt)</h6>
+          <h6>{{conjTense.header}}</h6>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-          <app-pronouns [conjPerTime]="entireConj.past_perfect"></app-pronouns>
+          <app-pronouns [conjTense]="conjTense" [pronouns]="entireConj.pronouns"></app-pronouns>
         </ion-col>
         <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-          <app-conjugation [conjPerTime]="entireConj.past_perfect"></app-conjugation>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>onvoltooid tegenwoordige toekomende tijd (ottt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-          <app-pronouns [conjPerTime]="entireConj.future"></app-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-          <app-conjugation [conjPerTime]="entireConj.future"></app-conjugation>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>voltooid tegenwoordige toekomende tijd (vttt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-          <app-pronouns [conjPerTime]="entireConj.future_perfect"></app-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-          <app-conjugation [conjPerTime]="entireConj.future_perfect"></app-conjugation>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3"class="ion-text-center ion-padding">
-          <h5>Voorwaardelijke wijs</h5>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>onvoltooid verleden toekomende tijd (ovtt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-          <app-pronouns [conjPerTime]="entireConj.conditional"></app-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-          <app-conjugation [conjPerTime]="entireConj.conditional"></app-conjugation>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-no-padding">
-          <h6>voltooid verleden toekomende tijd (vvtt)</h6>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-xs="4" size-sm="6" class="ion-text-end ion-padding">
-          <app-pronouns [conjPerTime]="entireConj.past_conditional"></app-pronouns>
-        </ion-col>
-        <ion-col size-xs="8" size-sm="6" class="ion-text-start ion-padding">
-          <app-conjugation [conjPerTime]="entireConj.past_conditional"></app-conjugation>
+          <app-conjugation [conjTense]="conjTense"></app-conjugation>
         </ion-col>
       </ion-row>
     </div>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
-        <ion-button class="ion-margin" fill="outline" (click)="onShowMore()">
-          {{ !showMore ? 'Show More' : 'Show Less' }}
-        </ion-button>
-      </ion-col>
-    </ion-row>
+  </div>
   </ion-grid>
 </ion-content>

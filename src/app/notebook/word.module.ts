@@ -66,23 +66,17 @@ export class SearchedWord {
   ){}
 }
 
-export type ConjElement = {pronoun: string, conj: string}
-export type ConjPerTime = {
-  first_singular: ConjElement,
-  second_singular: ConjElement,
-  third_singular: ConjElement,
-  first_plural: ConjElement,
-  second_plural: ConjElement,
-  third_plural: ConjElement
+export type ConjTense = {
+  header: string,
+  conj: string[]
 }
 
-export type EntireConjugation = {
-  present: ConjPerTime,
-  present_perfect: ConjPerTime,
-  simple_past: ConjPerTime,
-  past_perfect: ConjPerTime,
-  future: ConjPerTime,
-  future_perfect: ConjPerTime,
-  conditional: ConjPerTime,
-  past_conditional: ConjPerTime,
+export type ConjGroup = {
+  group_name: string,
+  group_conj: ConjTense[]
+}
+
+export type EntireConj = {
+  pronouns: string[],
+  entire_conj: ConjGroup[]
 }

@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ModalController, AlertController } from '@ionic/angular';
 import { VerbInput } from '../wordInput.module';
-import { EntireConjugation, KindWord, SearchedWord } from '../word.module';
+import { EntireConj, KindWord, SearchedWord } from '../word.module';
 import { InputValidator } from '../../shared/util/inputValidator';
 import { VerbConjComponent } from '../verb-conj/verb-conj.component';
 
@@ -14,7 +14,7 @@ import { VerbConjComponent } from '../verb-conj/verb-conj.component';
 export class NewVerbComponent implements OnInit {
 
   @Input() verb: SearchedWord;
-  @Input() entireConj: EntireConjugation;
+  @Input() entireConj: EntireConj;
   @ViewChild('f', {static : true}) form: NgForm;
   word: string;
   translations: string;
@@ -32,7 +32,7 @@ export class NewVerbComponent implements OnInit {
       this.translations = this.verb.translations.join(', ');
     }
     if(this.entireConj){
-      const ppFp: string = this.entireConj.present_perfect.first_plural.conj;
+      const ppFp: string = this.entireConj.entire_conj[0].group_conj[1].conj[3];
       this.auxVerb = ppFp.includes('zijn') ? 'zijn' : 'hebben';
     }
   }

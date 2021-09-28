@@ -7,7 +7,7 @@ import { NewWordComponent } from '../new-word/new-word.component';
 import { SearchWordService } from '../services/search-word.service';
 import { KindOfWordUtil } from '../shared/kindOfWordUtil';
 import { openAddWordModal } from '../shared/openAddWordModal';
-import { EntireConjugation, KindWord, NounWithArticle, SearchedWord } from '../word.module';
+import { EntireConj, KindWord, NounWithArticle, SearchedWord } from '../word.module';
 import { WordsService } from '../words.service';
 @Component({
   selector: 'app-search-word',
@@ -106,8 +106,9 @@ export class SearchWordPage implements OnInit {
   }
 
   private openVerbModal(word: SearchedWord){
-    this.searchWordService.conjugateVerb(word.word).subscribe((data : EntireConjugation) =>
+    this.searchWordService.conjugateVerb(word.word).subscribe((data : EntireConj) =>
       {
+        console.log(data);
         openAddWordModal(this.modalCtrl, this.loadingCtrl, this.wordsService, {component: NewVerbComponent, componentProps: {verb: word, entireConj: data}}, 'addVerb');
       },
       errRes => {
